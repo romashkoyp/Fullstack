@@ -1,0 +1,13 @@
+flowchart TD
+    A[Submitting the form] -->|method POST| B(server)
+    B --> C[add new note]
+    B -->|responds code 302| D[browser]
+    D -->|method GET| E[location]
+    E --> D
+    D -->|reloads notes pages| F{HTTP requests}
+    F --> G(main.css)
+    F --> H(main.js)
+    F --> I(data.json)
+    G --> J(rendering)
+    H --> J(rendering)
+    I --> J(rendering)

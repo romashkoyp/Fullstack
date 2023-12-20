@@ -1,0 +1,5 @@
+flowchart TD
+    A[Submitting the form] --> B(browser)
+    B --> |request new_note_spa| C(server)
+    C --> |respond code 201| B
+    B --> D(rendering new note)
