@@ -39,7 +39,7 @@ const App = () => {
 
   const names = {
     header1: 'Anecdote of the day',
-    header2: 'Anecdote with most votes',
+    header2: 'Anecdote with most votes'
   }
 
   const maxVotes = () => {

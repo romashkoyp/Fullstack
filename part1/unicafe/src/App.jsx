@@ -62,7 +62,7 @@ const App = () => {
 
   const names = {
     header1: 'Give feedback',
-    header2: 'Statistics',
+    header2: 'Statistics'
   }
 
   const increaseGood = () => {
