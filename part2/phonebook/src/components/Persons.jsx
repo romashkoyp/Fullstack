@@ -1,9 +1,11 @@
-const Persons = ({ dataToShow }) => {
+const Persons = ({ dataToShow, deleteRecord }) => {
     return (
         <div>
             {dataToShow.map((person, index) => (
-                <div key={index}>{person.name} - {person.number}</div>
+                <div key={index}>{person.name} - {person.number}
+                <button onClick={() => deleteRecord(person.id, person)}>delete</button></div>
             ))}
+            
         </div>
     )
 }
