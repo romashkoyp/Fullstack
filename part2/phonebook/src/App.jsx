@@ -3,6 +3,8 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notification from './components/Notification'
+import Positive from './components/Positive'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +12,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null) //display error only when it occurs
+  const [successMessage, setSuccessMessage] = useState(null) //display success only when it occurs
 
   useEffect(() => {
     console.log('effect')
@@ -21,16 +25,23 @@ const App = () => {
   }, [])
   console.log('render', persons.length, 'persons')
 
+  const showMessage = (message, setMessageFunction) => {
+    setMessageFunction(message)
+    setTimeout(() => {
+      setMessageFunction(null)
+    }, 6000)
+  }
+
   const addName = (event) => {
     event.preventDefault()
-  
+
     if (newName.trim() === '' || newNumber.trim() === '') {
-      alert('Please enter both name and number')
+      showMessage('Please enter both name and number', setErrorMessage)
       return
     }
-  
+
     const existingPerson = persons.find((person) => person.name === newName)
-  
+
     const processPerson = (personData) => {
       setPersons((prevPersons) => {
         const updatedPersons = prevPersons.map((person) =>
@@ -40,33 +51,38 @@ const App = () => {
           ? prevPersons
           : prevPersons.concat(personData)
       })
-      setNewName('') // remove name from the input field
-      setNewNumber('') // remove number from the input field
+      setNewName('')
+      setNewNumber('')
       console.log(personData)
     }
-  
+
     if (existingPerson) {
       const numberReplace = window.confirm(
         `${newName} is already added to the phonebook. Replace the old number with a new one?`
       )
-  
+
       if (numberReplace) {
         const updatedPerson = {
           ...existingPerson,
           number: newNumber,
         }
-  
+
         personService
           .update(existingPerson.id, updatedPerson)
           .then((response) => {
             const updatedPersons = persons.map((person) =>
               person.id === existingPerson.id ? response.data : person
             )
-            setPersons(updatedPersons)
-            processPerson(response.data)
+            personService.getAll().then((response) => {
+              setPersons(response.data)
+              setNewName('')
+              setNewNumber('')
+              showMessage(`New phone number ${newNumber} for ${newName} has been updated`, setSuccessMessage)
+            })
           })
           .catch((error) => {
-            console.error('Error updating record:', error)
+            console.log('Error updating record:', error)
+            showMessage(`Information of ${newName} has already been removed from server`, setErrorMessage)
           })
       }
     } else {
@@ -74,14 +90,16 @@ const App = () => {
         name: newName,
         number: newNumber,
       }
-  
+
       personService
         .create(newRecord)
         .then((response) => {
           processPerson(response.data)
+          showMessage(`New record ${newName} - ${newNumber} has been added to the phonebook`, setSuccessMessage)
         })
         .catch((error) => {
-          console.error('Error creating record:', error)
+          console.log('Error creating record:', error)
+          showMessage('Error creating record', setErrorMessage)
         })
     }
   }
@@ -92,9 +110,11 @@ const App = () => {
       .remove(id)
       .then(response => {
         setPersons(persons.filter(person => person.id !== id))
+        showMessage(`Record has been deleted from the phonebook`, setSuccessMessage)      
       })
       .catch(error => {
-        console.error('Error deleting record:', error)
+        console.log('Error deleting record:', error)
+        showMessage('Error deleting record', setErrorMessage)
       }) 
     } else {
         return
@@ -123,13 +143,16 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+
+      <Notification message={errorMessage} />
+      <Positive message={successMessage} />
 
       <Filter
       filter={filter}
       handleFilterChange={handleFilterChange} /> 
 
-      <h3>Add a new</h3>
+      <h2>Add a new</h2>
 
       <PersonForm 
       addName={addName}
@@ -138,7 +161,7 @@ const App = () => {
       newNumber={newNumber}
       handleNumberChange={handleNumberChange} />
 
-      <h3>Numbers</h3>
+      <h2>Numbers</h2>
 
       <Persons dataToShow={dataToShow} deleteRecord={deleteRecord} />
     </div>
