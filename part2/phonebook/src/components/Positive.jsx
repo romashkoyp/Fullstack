@@ -1,4 +1,4 @@
-const Posistive = ({ message }) => {
+const Positive = ({ message }) => {
     if (message === null) {
       return null
     }
@@ -10,4 +10,4 @@ const Posistive = ({ message }) => {
     )
   }
 
-  export default Posistive
+  export default Positive
