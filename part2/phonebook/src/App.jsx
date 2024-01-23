@@ -40,7 +40,7 @@ const App = () => {
       return
     }
 
-    const existingPerson = persons.find((person) => person.name === newName)
+    const existingPerson = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
 
     const processPerson = (personData) => {
       setPersons((prevPersons) => {
@@ -98,8 +98,9 @@ const App = () => {
           showMessage(`New record ${newName} - ${newNumber} has been added to the phonebook`, setSuccessMessage)
         })
         .catch((error) => {
-          console.log('Error creating record:', error)
-          showMessage('Error creating record', setErrorMessage)
+          const errorMessage = error.response.data.error
+          console.log(errorMessage)
+          showMessage(errorMessage, setErrorMessage)
         })
     }
   }

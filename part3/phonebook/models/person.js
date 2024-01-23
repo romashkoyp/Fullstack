@@ -13,10 +13,27 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+  const validateNumber = function (value) {
+    const regex = /^(\d{2,3})-(\d+)$/
+    return regex.test(value)
+  }
+
   const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
-})
+    name: {
+      type: String,
+      minLength: 3,
+      required: true
+    },
+    number: {
+      type: String,
+      minLength: 8,
+      required: true,
+      validate: {
+        validator: validateNumber,
+        message: 'Invalid phone number format',
+      },
+    }
+  })
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
