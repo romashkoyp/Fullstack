@@ -38,7 +38,7 @@ test('a valid blog can be added', async () => {
     title: 'async/await simplifies making async calls',
     author: 'Morgan Freeman',
     _url: 'https://cloud.mongodb.com/',
-    likes: 28
+    likes: 1
   }
 
   await api
@@ -116,6 +116,50 @@ test('likes is equal to 0 if no likes in request', async () => {
 
   const likes = blogsAtEnd.map(n => n.likes)
   expect(likes).toContain(0)
+})
+
+test('delete single blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(
+    helper.initialBlogs.length - 1
+  )
+
+  const titles = blogsAtEnd.map(r => r.title)
+
+  expect(titles).not.toContain(blogToDelete.title)
+})
+
+test('update the number of likes for a blog by id', async () => {
+  const newBlog = {
+    likes: 30
+  }
+
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[1]
+  const updatedLikes = newBlog.likes
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send({ likes: updatedLikes })
+    .expect(200)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(
+    helper.initialBlogs.length
+  )
+
+  const likes = blogsAtEnd.map(r => r.likes)
+
+  expect(likes).toContain(updatedLikes)
 })
 
 afterAll(async () => {
