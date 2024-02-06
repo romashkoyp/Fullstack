@@ -44,9 +44,9 @@ blogsRouter.post('/', async (request, response) => {
 
   const user = await User.findById(decodedToken.id)
 
-  if (!body.title || !body.author || !body._url) {
+  if (!body.title || !body.author || !body._url || !body.userId) {
     return response.status(400).json({
-      error: 'The title, author or number is missing'
+      error: 'The title, author, number or userID is missing'
     })
   } else if (!body.likes) {
     blog = new Blog({
