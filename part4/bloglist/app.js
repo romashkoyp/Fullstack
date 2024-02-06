@@ -6,6 +6,7 @@ const cors = require('cors')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -35,6 +36,7 @@ morgan.token('post-data', (req) => {
 })
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

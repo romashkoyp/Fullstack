@@ -1,0 +1,33 @@
+GET http://localhost:3001/api/users/
+
+###
+
+POST http://localhost:3001/api/users/
+Content-Type: application/json
+
+{
+    "username": "Georgii",
+    "name": "Georgii Romashko",
+    "password": "dfk"
+}
+
+###
+
+GET http://localhost:3001/api/blogs/
+
+###
+
+POST http://localhost:3001/api/blogs/
+Content-Type: application/json
+
+{
+    "title": "Super power of AI",
+    "author": "Joseph",
+    "_url": "dfkd,jk,",
+    "likes": "9",
+    "userId": "65c221f93f6e11f0c461ba07"
+}
+
+###
+
+DELETE http://localhost:3001/api/blogs/65bd03e57d035dc5ba98ec07
