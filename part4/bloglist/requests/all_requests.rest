@@ -29,13 +29,13 @@ GET http://localhost:3001/api/blogs/
 
 POST http://localhost:3001/api/blogs/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikdlb3JnaWkiLCJpZCI6IjY1YzIyMWY5M2Y2ZTExZjBjNDYxYmEwNyIsImlhdCI6MTcwNzIyNTQzMSwiZXhwIjoxNzA3MjI5MDMxfQ.cmbYenO6xj1aTgLVe-GxtuY8hzgUHR1n-nXNf-1yQQc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikdlb3JnaWkiLCJpZCI6IjY1YzIyMWY5M2Y2ZTExZjBjNDYxYmEwNyIsImlhdCI6MTcwNzIyOTEwNCwiZXhwIjoxNzA3MjMyNzA0fQ.8YHLyI7O8fOjzHQhszhPOnRosEFiuphNEtRzQcbCMpA
 
 {
-    "title": "Hello",
-    "author": "Morgan",
-    "_url": "hjmghjmhgjm,",
-    "likes": "76"
+    "title": "Hello3",
+    "author": "Morgan3",
+    "_url": "ghnfghnfghnf",
+    "likes": "34"
 }
 
 ###

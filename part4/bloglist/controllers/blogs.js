@@ -6,14 +6,6 @@ const jwt = require('jsonwebtoken')
 let blogs = [
 ]
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogsRouter.get('/', async (request, response) => {
   if (blogs) {
     const blogs = await Blog
@@ -34,16 +26,23 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+  console.log('Token in request:', request.token)
   const body = request.body
   let blog
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!request.token) {
+    console.log('Token missing')
+    return response.status(401).json({ error: 'token missing' })
+  }
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
+    console.log('Invalid token')
     return response.status(401).json({ error: 'token invalid' })
   }
-  const user = await User.findById(decodedToken.id)
+  console.log('Token verified successfully')
 
-  //const user = await User.findById(body.userId)
+  const user = await User.findById(decodedToken.id)
 
   if (!body.title || !body.author || !body._url) {
     return response.status(400).json({
