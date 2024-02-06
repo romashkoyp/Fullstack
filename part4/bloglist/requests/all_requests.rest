@@ -13,19 +13,29 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3001/api/login/
+Content-Type: application/json
+
+{
+    "username": "Georgii",
+    "password": "dfk"
+}
+
+###
+
 GET http://localhost:3001/api/blogs/
 
 ###
 
 POST http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikdlb3JnaWkiLCJpZCI6IjY1YzIyMWY5M2Y2ZTExZjBjNDYxYmEwNyIsImlhdCI6MTcwNzIyNTQzMSwiZXhwIjoxNzA3MjI5MDMxfQ.cmbYenO6xj1aTgLVe-GxtuY8hzgUHR1n-nXNf-1yQQc
 
 {
-    "title": "Super power of AI",
-    "author": "Joseph",
-    "_url": "dfkd,jk,",
-    "likes": "9",
-    "userId": "65c221f93f6e11f0c461ba07"
+    "title": "Hello",
+    "author": "Morgan",
+    "_url": "hjmghjmhgjm,",
+    "likes": "76"
 }
 
 ###
