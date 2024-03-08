@@ -3,17 +3,9 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-let blogs = [
-]
-
 blogsRouter.get('/', async (request, response) => {
-  if (blogs) {
-    const blogs = await Blog
-      .find({}).populate('user', { username: 1, name: 1 })
-    response.json(blogs)
-  } else {
-    response.status(404).end()
-  }
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, _id: 1 })
+  response.json(blogs)
 })
 
 blogsRouter.get('/:id', async (request, response) => {
@@ -27,8 +19,6 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   console.log('Token in request:', request.token)
-  const body = request.body
-  let blog
 
   if (!request.token) {
     console.log('Token missing')
@@ -43,33 +33,22 @@ blogsRouter.post('/', async (request, response) => {
   console.log('Token verified successfully')
 
   const user = await User.findById(decodedToken.id)
+  const blog = new Blog({ ...request.body, user: user._id })
 
-  if (!body.title || !body.author || !body._url) {
+  if (!blog.likes) {
+    blog.likes = 0
+  }
+
+  if (!blog.title || !blog.author || !blog._url) {
     return response.status(400).json({
       error: 'The title, author or number is missing'
     })
-  } else if (!body.likes) {
-    blog = new Blog({
-      title: body.title,
-      author: body.author,
-      _url: body._url,
-      user: body.userId,
-      likes: 0
-    })
   } else {
-    blog = new Blog({
-      title: body.title,
-      author: body.author,
-      _url: body._url,
-      user: body.userId,
-      likes: body.likes
-    })
+    const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+    response.status(201).json(savedBlog)
   }
-  const savedBlog = await blog.save()
-  user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
-
-  response.status(201).json(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
