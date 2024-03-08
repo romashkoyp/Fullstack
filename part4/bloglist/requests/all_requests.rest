@@ -2,6 +2,10 @@ GET http://localhost:3001/api/users/
 
 ###
 
+GET http://localhost:3001/api/blogs/
+
+###
+
 POST http://localhost:3001/api/users/
 Content-Type: application/json
 
@@ -34,10 +38,6 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3001/api/blogs/
-
-###
-
 POST http://localhost:3001/api/blogs/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inlhcm9zbGF2IiwiaWQiOiI2NWU5ZTA3ZDk3ZmZkY2QzZTEwMzEzOWYiLCJpYXQiOjE3MDk4OTI2ODUsImV4cCI6MTcwOTg5NjI4NX0.3uqhQd1-Ie3azGbrQmceguB9ie7o73DKZtThnsJac_c
@@ -67,3 +67,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inlhc
 
 DELETE http://localhost:3001/api/blogs/65c225a0c5443cc038b5e5a9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikdlb3JnaWkiLCJpZCI6IjY1YzIyMWY5M2Y2ZTExZjBjNDYxYmEwNyIsImlhdCI6MTcwNzI0MjE3MiwiZXhwIjoxNzA3MjQ1NzcyfQ.IA906wkukzj0KMkugUA_1fMuK2luT6GRMsq9TRythaM
+
+###
+
+PUT http://localhost:3001/api/blogs/65eaffa99b5e9a0105986283
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inlhcm9zbGF2IiwiaWQiOiI2NWU5ZTA3ZDk3ZmZkY2QzZTEwMzEzOWYiLCJpYXQiOjE3MDk4OTk0NTcsImV4cCI6MTcwOTkwMzA1N30.G7d8R0lWnDrmkb4DG5QEVQolX2xVKcx8-QQERFy9jcM
+
+{
+    "title": "srty",
+    "author": "rtyryt",
+    "_url": "rtyhrty",
+    "likes": 2
+}
+
+###
