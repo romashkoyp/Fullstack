@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 
 const Blog = ({ blog, setBlogs }) => {
   const [contentVisible, setContentVisible] = useState(false)
-  
+
   const hideContent = {
     display: contentVisible ? 'none' : '',
     paddingTop: 10,
@@ -27,7 +27,7 @@ const Blog = ({ blog, setBlogs }) => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
     const updatedBlogResponse = await blogService.update(blog.id, updatedBlog)
     setBlogs((prevBlogs) =>
-      prevBlogs.map((prevBlog) => (prevBlog.id === updatedBlogResponse.id ? updatedBlogResponse : prevBlog))
+      prevBlogs.map((prevBlog) => (prevBlog.id === updatedBlogResponse.id ? { ...prevBlog, ...updatedBlogResponse } : prevBlog))
     )
     console.log('likes updated for blog', {updatedBlog})
   }
@@ -42,9 +42,12 @@ const Blog = ({ blog, setBlogs }) => {
         {blog.title} - {blog.author}
         <button onClick={() => setContentVisible(false)}>hide</button>
         <br />
+        {blog._url}
+        <br />
         likes {blog.likes}
         <button onClick={handleLikes}>like</button>
         <br />
+        {blog.user.name}
      </div>
     </div>
 )}

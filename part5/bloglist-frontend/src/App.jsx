@@ -94,14 +94,16 @@ const App = () => {
     blogService
       .create(blogObject)
         .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-        showMessage(`New blog ${title} by author ${author} added`, setSuccessMessage)
-        setBlogVisible(false)
+          setBlogs(blogs.concat(returnedBlog))
+          setTitle('')
+          setAuthor('')
+          setUrl('')
+          showMessage(`New blog ${title} by author ${author} added`, setSuccessMessage)
+          setBlogVisible(false)
       })
   }
+
+  console.log(blogs)
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
