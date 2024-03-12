@@ -19,6 +19,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogFormVisible, setBlogVisible] = useState(false)
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
     blogService
@@ -173,11 +174,10 @@ const App = () => {
       <p>
         {user.name} logged in
         <button type="button" onClick={handleLogout}>logout</button>
-      </p>
-      
+      </p>  
       {blogForm()}
       <br />
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       )}
     </div>
