@@ -42,21 +42,18 @@ const Blog = ({ blog, setBlogs, user }) => {
 
   return (
     <div>
-      <div style={hideContent}>
-        {blog.title} - {blog.author}
-        <button onClick={() => setContentVisible(true)}>view</button>
+      <div style={hideContent} className='smallBlog'>
+        <div>
+          {blog.title} - {blog.author} <button onClick={() => setContentVisible(true)}>view</button>
+        </div>
       </div>
-      <div style={showContent}>
-        {blog.title} - {blog.author}
-        <button onClick={() => setContentVisible(false)}>hide</button>
-        <br />
-        {blog._url}
-        <br />
-        likes {blog.likes}
-        <button onClick={handleLikes}>like</button>
-        <br />
-        {blog.user.name}
-        <br />
+      <div style={showContent} className='bigBlog'>
+        <div>
+          {blog.title} - {blog.author} <button onClick={() => setContentVisible(false)}>hide</button>
+        </div>
+        <div>{blog._url}</div>
+        <div>likes {blog.likes} <button onClick={handleLikes}>like</button></div>
+        <div>{blog.user.name}</div>
         {showRemoveButton && <button onClick={() => handleDeleteBlog(blog.id)}>remove blog</button>}
       </div>
     </div>
