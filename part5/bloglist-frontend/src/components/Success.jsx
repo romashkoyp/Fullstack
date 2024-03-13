@@ -1,13 +1,13 @@
 const Success = ({ message }) => {
-    if (message === null) {
-      return null
-    }
-  
-    return (
-      <div className='success'>
-        {message}
-      </div>
-    )
+  if (message === null) {
+    return null
   }
 
-  export default Success
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
+export default Success

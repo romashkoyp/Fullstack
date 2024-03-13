@@ -30,18 +30,18 @@ const Blog = ({ blog, setBlogs, user }) => {
     setBlogs((prevBlogs) =>
       prevBlogs.map((prevBlog) => (prevBlog.id === updatedBlogResponse.id ? { ...prevBlog, ...updatedBlogResponse } : prevBlog))
     )
-    console.log('likes updated for blog', {updatedBlog})
+    console.log('likes updated for blog', { updatedBlog })
   }
 
   const handleDeleteBlog = async (id) => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
       await blogService._delete(id)
       setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id))
-    }      
+    }
   }
 
   return (
-    <div>   
+    <div>
       <div style={hideContent}>
         {blog.title} - {blog.author}
         <button onClick={() => setContentVisible(true)}>view</button>
@@ -58,8 +58,8 @@ const Blog = ({ blog, setBlogs, user }) => {
         {blog.user.name}
         <br />
         {showRemoveButton && <button onClick={() => handleDeleteBlog(blog.id)}>remove blog</button>}
-     </div>
+      </div>
     </div>
-)}
+  )}
 
 export default Blog

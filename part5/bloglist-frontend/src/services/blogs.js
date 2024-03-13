@@ -40,6 +40,6 @@ const _delete = async (id) => {
   return response.data
 }
 
-export default { 
+export default {
   getAll, create, update, setToken, _delete
 }
