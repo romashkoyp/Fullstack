@@ -3,11 +3,16 @@ import blogService from '../services/blogs'
 
 const Blog = ({ blog, setBlogs, user }) => {
   const [contentVisible, setContentVisible] = useState(false)
-  const [functionCallCount, setFunctionCallCount] = useState(0)
+  const [viewCallCount, setViewCallCount] = useState(0)
+  const [likeCallCount, setLikeCallCount] = useState(0)
 
   useEffect(() => {
-    console.log(`Button "view"/"hide" clicked ${functionCallCount} times for blog with ID: ${blog.id}`)
-  }, [functionCallCount, blog.id])
+    console.log(`Button "view"/"hide" clicked ${viewCallCount} times for blog with ID: ${blog.id}`)
+  }, [viewCallCount, blog.id])
+
+  useEffect(() => {
+    console.log(`Button "like" clicked ${likeCallCount} times for blog with ID: ${blog.id}`)
+  }, [likeCallCount, blog.id])
 
   const showRemoveButton = user && blog.user && user.id === blog.user.id
 
@@ -36,7 +41,7 @@ const Blog = ({ blog, setBlogs, user }) => {
     setBlogs((prevBlogs) =>
       prevBlogs.map((prevBlog) => (prevBlog.id === updatedBlogResponse.id ? { ...prevBlog, ...updatedBlogResponse } : prevBlog))
     )
-    console.log('likes updated for blog', { updatedBlog })
+    setLikeCallCount(prevCount => prevCount + 1)
   }
 
   const handleDeleteBlog = async (id) => {
@@ -49,7 +54,7 @@ const Blog = ({ blog, setBlogs, user }) => {
   const handleVisibility = async (event) => {
     event.preventDefault()
     setContentVisible(!contentVisible)
-    setFunctionCallCount(prevCount => prevCount + 1)
+    setViewCallCount(prevCount => prevCount + 1)
   }
 
   return (
@@ -64,7 +69,7 @@ const Blog = ({ blog, setBlogs, user }) => {
           {blog.title} - {blog.author} <button onClick={handleVisibility}>hide</button>
         </div>
         <div>{blog._url}</div>
-        <div>likes {blog.likes} <button onClick={handleLikes}>like</button></div>
+        <div>likes {blog.likes} <button className='like' onClick={handleLikes}>like</button></div>
         <div>{blog.user.name}</div>
         {showRemoveButton && <button onClick={() => handleDeleteBlog(blog.id)}>remove blog</button>}
       </div>
