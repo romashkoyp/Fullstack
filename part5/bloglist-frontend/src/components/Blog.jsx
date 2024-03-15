@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, setBlogs, user }) => {
   const [contentVisible, setContentVisible] = useState(false)
+  const [functionCallCount, setFunctionCallCount] = useState(0)
+
+  useEffect(() => {
+    console.log(`Button "view"/"hide" clicked ${functionCallCount} times for blog with ID: ${blog.id}`)
+  }, [functionCallCount, blog.id])
+
   const showRemoveButton = user && blog.user && user.id === blog.user.id
 
   const hideContent = {
@@ -40,16 +46,22 @@ const Blog = ({ blog, setBlogs, user }) => {
     }
   }
 
+  const handleVisibility = async (event) => {
+    event.preventDefault()
+    setContentVisible(!contentVisible)
+    setFunctionCallCount(prevCount => prevCount + 1)
+  }
+
   return (
     <div>
       <div style={hideContent} className='smallBlog'>
         <div>
-          {blog.title} - {blog.author} <button onClick={() => setContentVisible(true)}>view</button>
+          {blog.title} - {blog.author} <button onClick={handleVisibility}>view</button>
         </div>
       </div>
       <div style={showContent} className='bigBlog'>
         <div>
-          {blog.title} - {blog.author} <button onClick={() => setContentVisible(false)}>hide</button>
+          {blog.title} - {blog.author} <button onClick={handleVisibility}>hide</button>
         </div>
         <div>{blog._url}</div>
         <div>likes {blog.likes} <button onClick={handleLikes}>like</button></div>
