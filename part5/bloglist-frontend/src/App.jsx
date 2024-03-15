@@ -151,8 +151,7 @@ const App = () => {
       <Error message={errorMessage} />
       <Success message={successMessage} />
       <p>
-        {user.name} logged in
-        <button type="button" onClick={handleLogout}>logout</button>
+        {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="create new blog" ref={blogFormRef} setVisible={() => {}}>
         <BlogForm

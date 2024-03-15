@@ -35,8 +35,8 @@ describe('Blog component', () => {
     await user.click(buttonView)
 
     const blogBigContent = container.querySelector('.bigBlog')
-    expect(window.getComputedStyle(blogBigContent).display).toBe('block') //visible
-    screen.debug()
+    expect(blogBigContent).not.toHaveStyle('display: none') //visible
+    //screen.debug()
     const buttonLike = container.querySelector('.like')
     await user.click(buttonLike)
     await user.click(buttonLike)
@@ -46,17 +46,17 @@ describe('Blog component', () => {
 })
 test('title and author blog visible, but url and likes - not', async () => {
   const { container } = render(<Blog blog={blog} />)
-  screen.debug()
+  //screen.debug()
 
   const blogSmallContent = container.querySelector('.smallBlog')
   console.log(`TEXT FROM BLOGCONTENT: ${blogSmallContent.textContent}`)
-  expect(window.getComputedStyle(blogSmallContent).display).toBe('block') //visible
+  expect(blogSmallContent).not.toHaveStyle('display: none') //visible
   expect(blogSmallContent).toHaveTextContent(`${blog.title} - ${blog.author}`)
   expect(blogSmallContent).not.toHaveTextContent(blog._url)
   expect(blogSmallContent).not.toHaveTextContent(blog.likes)
 
   const blogBigContent = container.querySelector('.bigBlog')
-  expect(window.getComputedStyle(blogBigContent).display).toBe('none') //hidden
+  expect(blogBigContent).toHaveStyle('display: none') //hidden
 })
 
 test('URL and likes are shown when the button \'view\' has been clicked', async () => {
@@ -64,15 +64,15 @@ test('URL and likes are shown when the button \'view\' has been clicked', async 
   const { container } = render(<Blog blog={blog} />)
   const user = userEvent.setup()
   const button = screen.getByText('view')
-  screen.debug(button)
+  //screen.debug(button)
   await user.click(button)
 
   const blogBigContent = container.querySelector('.bigBlog')
-  screen.debug()
-  expect(window.getComputedStyle(blogBigContent).display).toBe('block') //visible
+  //screen.debug()
+  expect(blogBigContent).not.toHaveStyle('display: none') //visible
   expect(blogBigContent).toHaveTextContent(blog._url)
   expect(blogBigContent).toHaveTextContent(blog.likes)
 
   const blogSmallContent = container.querySelector('.smallBlog')
-  expect(window.getComputedStyle(blogSmallContent).display).toBe('none') //hidden
+  expect(blogSmallContent).toHaveStyle('display: none') //hidden
 })
