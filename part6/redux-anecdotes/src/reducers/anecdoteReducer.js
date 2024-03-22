@@ -1,7 +1,9 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.'
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...'
 ]
 
 const getId = () => (100000 * Math.random()).toFixed(0)
@@ -14,45 +16,21 @@ const asObject = (item) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
-
-const anecdoteReducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-  switch (action.type) {
-    case 'INCREMENT': {
-      const anecdoteToVote = state.find(anecdote => anecdote.id === action.data.id)
-      const votedAnecdote = {
-        ...anecdoteToVote,
-        votes: anecdoteToVote.votes + 1
-      }
-      return state.map(anecdote =>
-        anecdote.id !== action.data.id ? anecdote : votedAnecdote
-      )
-    }
-    case 'NEW_ANECDOTE': {
-      const newAnecdote = asObject(action.payload.content)
-      return [...state, newAnecdote]
-    }
-    default:
-      return state
-  }
-}
-
-export const incrementVote = (id) => {
-  return {
-    type: 'INCREMENT',
-    data: { id }
-  }
-}
-
-export const createAnecdote = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    payload: {
-      content
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState: anecdotesAtStart.map(asObject),
+  reducers: {
+    incrementVote(state, action) {
+      const id = action.payload;
+      const anecdoteToVote = state.find(anecdote => anecdote.id === id)
+      anecdoteToVote.votes += 1;
+    },
+    createAnecdote(state, action) {
+      const newAnecdote = asObject(action.payload)
+      state.push(newAnecdote)
     }
   }
-}
+})
 
-export default anecdoteReducer
+export const { incrementVote, createAnecdote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
