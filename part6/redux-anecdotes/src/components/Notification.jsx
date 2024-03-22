@@ -11,14 +11,16 @@ const Notification = () => {
 
   }
 
-  return (
-    <div>
-      <div style={style}>
-        {notification}
-      </div>
-      <p></p>
-    </div>
+  const message = notification.message
 
+  return (
+    message && 
+      <div>
+        <div style={style}>
+          {message}
+        </div>
+        <p></p>
+      </div>
   )
 }
 
