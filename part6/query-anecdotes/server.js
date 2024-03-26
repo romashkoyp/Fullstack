@@ -5,15 +5,17 @@ const router = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults()
 
 const validator = (request, response, next) => {
-  console.log()
+  console.log("Validator called:", request.method, request.body)
 
   const { content } = request.body
 
   if (request.method==='POST' && (!content || content.length<5) ) {
+    console.log("Validation failed: too short anecdote")
     return response.status(400).json({
       error: 'too short anecdote, must have length 5 or more'
     })
   } else {
+    console.log("Validation passed")
     next()
   }
 }
