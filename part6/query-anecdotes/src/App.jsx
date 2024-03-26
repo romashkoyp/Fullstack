@@ -15,6 +15,9 @@ const App = () => {
     mutationFn: voteAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onMutate: (updatedAnecdote) => {
+      console.log('New vote for:', updatedAnecdote)
     }
   })
 

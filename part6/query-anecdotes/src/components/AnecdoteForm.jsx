@@ -8,6 +8,9 @@ const AnecdoteForm = () => {
     mutationFn: createAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onMutate: (newAnecdote) => {
+      console.log('Creating new anecdote:', newAnecdote)
     }
   })
 
