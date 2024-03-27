@@ -15,15 +15,13 @@ const App = () => {
   
   const queryClient = useQueryClient()
 
-  const { dispatch } = useContext(NotificationContext)
+  const { showNotification } = useContext(NotificationContext)
 
   const anecdoteVoteMutation = useMutation({
     mutationFn: voteAnecdote,
     onSuccess: async (updatedAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-      dispatch({ type: 'SET_NOTIFICATION', payload: `You voted for: '${updatedAnecdote.content}'` })
-      await new Promise(resolve => setTimeout(resolve, 5000))
-      dispatch({ type: 'CLEAR_NOTIFICATION', payload: '' })
+      showNotification(`You voted for: '${updatedAnecdote.content}'`)
     },
     onMutate: (updatedAnecdote) => {
       console.log('New vote for:', updatedAnecdote)

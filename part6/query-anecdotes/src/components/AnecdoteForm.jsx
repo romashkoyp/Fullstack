@@ -6,15 +6,16 @@ import { createAnecdote } from '../requests'
 const AnecdoteForm = () => {
   const queryClient = useQueryClient()
 
-  const { dispatch } = useContext(NotificationContext)
+  const { showNotification } = useContext(NotificationContext)
   
   const newAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,
     onSuccess: async (createdAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-      dispatch({ type: 'SET_NOTIFICATION', payload: `New anecdote created: '${createdAnecdote.content}'` })
-      await new Promise(resolve => setTimeout(resolve, 5000))
-      dispatch({ type: 'CLEAR_NOTIFICATION', payload: '' })
+      showNotification(`New anecdote created: '${createdAnecdote.content}'`)
+    },
+    onError: (error) => {
+      showNotification(`Error: ${error.response.data.error}`, 'error')
     },
     onMutate: (newAnecdote) => {
       console.log('Creating new anecdote:', newAnecdote)

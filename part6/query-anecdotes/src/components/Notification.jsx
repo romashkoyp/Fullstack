@@ -2,24 +2,21 @@ import { useContext } from 'react'
 import { NotificationContext } from '../NotificationContext'
 
 const Notification = () => {
-  const { state } = useContext(NotificationContext)
+  const { state: { message, type } } = useContext(NotificationContext)
 
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 2,
-    color: 'green',
+    color: type === 'error' ? 'red' : 'green',
   }
 
-  return (
-    state.message && 
+  return message ? (
       <div>
-        <div style={style}>
-          {state.message}
-        </div>
+        <div style={style}>{message}</div>
         <p></p>
       </div>
-  )
+  ) : null
 }
 
 export default Notification
