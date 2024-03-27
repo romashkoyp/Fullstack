@@ -1,0 +1,11 @@
+POST http://localhost:3001/anecdotes
+Content-Type: application/json
+
+{
+    "content": "ty",
+    "id": "12634563456",
+    "votes": 0
+}
+
+###
+DELETE http://localhost:3001/anecdotes/12634563456
