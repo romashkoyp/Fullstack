@@ -12,7 +12,7 @@ const AnecdoteForm = () => {
     mutationFn: createAnecdote,
     onSuccess: async (createdAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-      dispatch({ type: 'SET_NOTIFICATION', payload: `New anecdote created: ${createdAnecdote.content}` })
+      dispatch({ type: 'SET_NOTIFICATION', payload: `New anecdote created: '${createdAnecdote.content}'` })
       await new Promise(resolve => setTimeout(resolve, 5000))
       dispatch({ type: 'CLEAR_NOTIFICATION', payload: '' })
     },

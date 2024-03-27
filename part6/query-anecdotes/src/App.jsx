@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAnecdotes, voteAnecdote } from './requests'
+import { NotificationContext } from './NotificationContext'
+import { useContext } from 'react'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
@@ -12,10 +14,16 @@ const App = () => {
   })
   
   const queryClient = useQueryClient()
+
+  const { dispatch } = useContext(NotificationContext)
+
   const anecdoteVoteMutation = useMutation({
     mutationFn: voteAnecdote,
-    onSuccess: () => {
+    onSuccess: async (updatedAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+      dispatch({ type: 'SET_NOTIFICATION', payload: `You voted for: '${updatedAnecdote.content}'` })
+      await new Promise(resolve => setTimeout(resolve, 5000))
+      dispatch({ type: 'CLEAR_NOTIFICATION', payload: '' })
     },
     onMutate: (updatedAnecdote) => {
       console.log('New vote for:', updatedAnecdote)
