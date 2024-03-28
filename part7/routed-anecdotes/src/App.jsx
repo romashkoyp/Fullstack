@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import ReactDOM from 'react-dom/client'
+import { useState, useEffect } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams
+  Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -57,7 +56,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -67,6 +66,10 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    setContent('')
+    setAuthor('')
+    setInfo('')
+    navigate('/')
   }
 
   return (
@@ -92,8 +95,26 @@ const CreateNew = (props) => {
 
 }
 
+const Notification = ({ notification, newAnecdote }) => {
+  if (!notification) {
+    return null
+  }
+
+  return (
+    newAnecdote && (
+      <div>A new anecdote '{newAnecdote.content}' created!</div>
+  )
+)}
+
 const App = () => {
   
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNotification(false)
+      setNewAnecdote(null)
+    }, 5000)
+  })
+
   const padding = {
     paddingRight: 5
   }
@@ -115,11 +136,14 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(false)
+  const [newAnecdote, setNewAnecdote] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(true)
+    setNewAnecdote(anecdote)
   }
 
   const anecdoteById = (id) =>
@@ -144,6 +168,9 @@ const App = () => {
           <Link style={padding} to="/">anecdotes</Link>
           <Link style={padding} to="/create">create new</Link>
           <Link style={padding} to="/about">about</Link>
+        </div>
+        <div>
+          <Notification notification={notification} newAnecdote={newAnecdote} />
         </div>
 
         <Routes>
