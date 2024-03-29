@@ -5,6 +5,19 @@ import {
 } from 'react-router-dom'
 import { useField } from './hooks'
 
+const Menu = () => {
+  const padding = {
+    paddingRight: 5
+  }
+  return (
+    <div>
+      <Link style={padding} to="/">anecdotes</Link>
+      <Link style={padding} to="/create">create new</Link>
+      <Link style={padding} to="/about">about</Link>
+    </div>
+  )
+}
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -54,11 +67,11 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const { fieldProps: content, reset: contentReset } = useField('text');
+  const { fieldProps: author, reset: authorReset } = useField('text');
+  const { fieldProps: info, reset: infoReset } = useField('text');
 
-  //const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -68,17 +81,17 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0
     })
-    content.reset()
-    author.reset()
-    info.reset()
-    //navigate('/')
+    contentReset()
+    authorReset()
+    infoReset()
+    navigate('/')
   }
 
   const handleReset = (e) => {
     e.preventDefault()
-    content.reset()
-    author.reset()
-    info.reset()
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
@@ -170,15 +183,8 @@ const App = () => {
     <div>
       <h2>Software anecdotes</h2>
       <Router>
-        <div>
-          <Link style={padding} to="/">anecdotes</Link>
-          <Link style={padding} to="/create">create new</Link>
-          <Link style={padding} to="/about">about</Link>
-        </div>
-        <div>
+          <Menu />
           <Notification notification={notification} newAnecdote={newAnecdote} />
-        </div>
-
         <Routes>
           <Route path="anecdotes/:id" element={<SingleAnecdote anecdotes={anecdotes} />} />
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
