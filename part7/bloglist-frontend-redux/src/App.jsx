@@ -1,25 +1,25 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import Blog from './components/Blog'
-import Error from './components/Error'
-import Success from './components/Success'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import BlogForm from './components/blogForm'
 import Togglable from './components/Togglable'
+import Notification from './components/Notification'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService
@@ -38,13 +38,6 @@ const App = () => {
     }
   }, [])
 
-  const showMessage = (message, setMessageFunction) => {
-    setMessageFunction(message)
-    setTimeout(() => {
-      setMessageFunction(null)
-    }, 6000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -60,10 +53,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong username or password')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong username or password', 'error', 5))
     }
   }
 
@@ -75,10 +65,7 @@ const App = () => {
       blogService.setToken(null)
       setUser(null)
     } catch (exception) {
-      setErrorMessage('logout failed')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('logout failed', 'error', 5))
     }
   }
 
@@ -103,10 +90,10 @@ const App = () => {
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
-        showMessage(`New blog ${returnedBlog.title} by author ${returnedBlog.author} added`, setSuccessMessage)
+        dispatch(setNotification(`New blog ${returnedBlog.title} by author ${returnedBlog.author} added`, 'success', 5))
       })
       .catch(error => {
-        showMessage('Failed to create new blog', setErrorMessage)
+        dispatch(setNotification('Failed to create new blog', 'error', 5))
       })
   }
 
@@ -140,8 +127,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Error message={errorMessage} />
-        <Success message={successMessage} />
+        <Notification />
         {loginForm()}
       </div>
     )
@@ -150,8 +136,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Error message={errorMessage} />
-      <Success message={successMessage} />
+      <Notification />
       <p>
         {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
       </p>
