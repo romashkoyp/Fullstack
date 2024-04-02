@@ -12,7 +12,6 @@ import { setNotification } from './reducers/notificationReducer'
 import { setBlogs, addNewBlog } from './reducers/blogReducer'
 
 const App = () => {
-  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -39,7 +38,6 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const newBlog = await blogService.create(blogObject)
-      //setBlogs(blogs.concat(newBlog))
       dispatch(addNewBlog(newBlog))
       dispatch(setNotification(`A new blog ${newBlog.title} by ${newBlog.author} added`, 'success', 5))
       blogFormRef.current.toggleVisibility()

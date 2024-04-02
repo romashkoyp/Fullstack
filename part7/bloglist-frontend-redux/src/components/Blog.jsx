@@ -1,19 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { incrementLikes, deleteBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, setBlogs, user }) => {
+const Blog = ({ blog, user }) => {
   const [contentVisible, setContentVisible] = useState(false)
-  const [viewCallCount, setViewCallCount] = useState(0)
-  const [likeCallCount, setLikeCallCount] = useState(0)
-
-  useEffect(() => {
-    console.log(`Button "view"/"hide" clicked ${viewCallCount} times for blog with ID: ${blog.id}`)
-  }, [viewCallCount, blog.id])
-
-  useEffect(() => {
-    console.log(`Button "like" clicked ${likeCallCount} times for blog with ID: ${blog.id}`)
-  }, [likeCallCount, blog.id])
-
+  const dispatch = useDispatch()
   const showRemoveButton = user && blog.user && user.id === blog.user.id
 
   const hideContent = {
@@ -38,23 +30,19 @@ const Blog = ({ blog, setBlogs, user }) => {
     event.preventDefault()
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
     const updatedBlogResponse = await blogService.update(blog.id, updatedBlog)
-    setBlogs((prevBlogs) =>
-      prevBlogs.map((prevBlog) => (prevBlog.id === updatedBlogResponse.id ? { ...prevBlog, ...updatedBlogResponse } : prevBlog))
-    )
-    setLikeCallCount(prevCount => prevCount + 1)
+    dispatch(incrementLikes(updatedBlogResponse))
   }
 
   const handleDeleteBlog = async (id) => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
       await blogService._delete(id)
-      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id))
+      dispatch(deleteBlog(id))
     }
   }
 
   const handleVisibility = async (event) => {
     event.preventDefault()
     setContentVisible(!contentVisible)
-    setViewCallCount(prevCount => prevCount + 1)
   }
 
   return (
