@@ -1,26 +1,37 @@
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
-const BlogForm = ({
-  onSubmit,
-  handleTitleChange,
-  handleAuthorChange,
-  handleUrlChange,
-  title,
-  author,
-  url,
-  likes
-}) => {
+const BlogForm = ({ onSubmit }) => {
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+  
+  const handleTitleChange = (event) => {
+    setNewTitle(event.target.value)
+  }
+
+  const handleAuthorChange = (event) => {
+    setNewAuthor(event.target.value)
+  }
+
+  const handleUrlChange = (event) => {
+    setNewUrl(event.target.value)
+  }
+
   const addBlog = (event) => {
     event.preventDefault()
-
+  
     const blogObject = {
-      title,
-      author,
-      _url: url,
-      likes: likes,
+      title: newTitle,
+      author: newAuthor,
+      _url: newUrl,
+      likes: 0,
     }
 
     onSubmit(blogObject)
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
   }
 
   return (
@@ -31,7 +42,7 @@ const BlogForm = ({
           title
           <input
             id="title"
-            value={title}
+            value={newTitle}
             onChange={handleTitleChange}
           />
         </div>
@@ -39,7 +50,7 @@ const BlogForm = ({
           author
           <input
             id="author"
-            value={author}
+            value={newAuthor}
             onChange={handleAuthorChange}
           />
         </div>
@@ -47,7 +58,7 @@ const BlogForm = ({
           url
           <input
             id="url"
-            value={url}
+            value={newUrl}
             onChange={handleUrlChange}
           />
         </div>
@@ -59,12 +70,6 @@ const BlogForm = ({
 
 BlogForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  handleTitleChange: PropTypes.func.isRequired,
-  handleAuthorChange: PropTypes.func.isRequired,
-  handleUrlChange: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired
-}
+  }
 
 export default BlogForm
