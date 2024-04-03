@@ -1,16 +1,31 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
+import usersService from './services/users'
 import BlogList from './components/blogList'
+import UserList from './components/UserList'
 import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs, addNewBlog } from './reducers/blogReducer'
-import { setUsername, selectUsername, setPassword, selectPassword, setUser, selectUser } from './reducers/userReducer'
+import {
+  setUsername,
+  selectUsername, 
+  setPassword, 
+  selectPassword, 
+  setUser, 
+  selectUser, 
+  setUsers, 
+  selectUsers
+} from './reducers/userReducer'
+
 
 const App = () => {
   const username = useSelector(selectUsername)
@@ -34,6 +49,14 @@ const App = () => {
       dispatch(setUser(user))
       blogService.setToken(user.token)
     }
+  }, [dispatch])
+
+  useEffect(() => {
+    usersService
+      .getAllUsers()
+      .then(initialUsers =>
+        dispatch(setUsers(initialUsers))
+      )
   }, [dispatch])
 
   const addBlog = async (blogObject) => {
@@ -95,18 +118,36 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      <p>
-        {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="create new blog" ref={blogFormRef} setVisible={() => {}}>
-        <BlogForm onSubmit={addBlog} />
-      </Togglable>
-      <br />
-      <BlogList user={user} setBlogs={setBlogs} />
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={
+            <div>
+              <h2>blogs</h2>
+              <Notification />
+              <p>
+                {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
+              </p>
+              <Togglable buttonLabel="create new blog" ref={blogFormRef} setVisible={() => {}}>
+                <BlogForm onSubmit={addBlog} />
+              </Togglable>
+              <br />
+              <BlogList user={user} setBlogs={setBlogs} />
+            </div>
+          } />
+          <Route path="/users" element={
+            <div>
+              <h2>blogs</h2>
+              <Notification />
+              <p>
+                {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
+              </p>
+              <UserList user={user} setUsers={setUsers} />
+            </div>
+          } />
+        </Routes> 
+      </div>
+    </Router>
   )
 }
 
