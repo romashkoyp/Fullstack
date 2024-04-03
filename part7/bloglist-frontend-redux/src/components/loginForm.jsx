@@ -1,4 +1,10 @@
-const LoginForm = ({ username, password, handleUsernameChange, handlePasswordChange, handleSubmit }) => {
+const LoginForm = ({ 
+  username,
+  password,
+  handleUsernameChange,
+  handlePasswordChange,
+  handleSubmit
+}) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -8,7 +14,7 @@ const LoginForm = ({ username, password, handleUsernameChange, handlePasswordCha
           type="text"
           value={username}
           name="Username"
-          onChange={handleUsernameChange}
+          onChange={({ target }) => handleUsernameChange(target.value)}
         />
       </div>
       <div>
@@ -18,7 +24,7 @@ const LoginForm = ({ username, password, handleUsernameChange, handlePasswordCha
           type="password"
           value={password}
           name="Password"
-          onChange={handlePasswordChange}
+          onChange={({ target }) => handlePasswordChange(target.value)}
         />
       </div>
       <button type="submit">login</button>

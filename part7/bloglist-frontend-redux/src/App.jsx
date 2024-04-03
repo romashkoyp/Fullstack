@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
@@ -10,11 +10,12 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs, addNewBlog } from './reducers/blogReducer'
+import { setUsername, selectUsername, setPassword, selectPassword, setUser, selectUser } from './reducers/userReducer'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const username = useSelector(selectUsername)
+  const password = useSelector(selectPassword)
+  const user = useSelector(selectUser)
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
@@ -30,10 +31,10 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const addBlog = async (blogObject) => {
     try {
@@ -57,9 +58,9 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
+      dispatch(setUser(user))
+      dispatch(setUsername(''))
+      dispatch(setPassword(''))
     } catch (exception) {
       dispatch(setNotification('wrong username or password', 'error', 5))
     }
@@ -71,7 +72,7 @@ const App = () => {
       await logoutService.logout()
       window.localStorage.removeItem('loggedBlogappUser')
       blogService.setToken(null)
-      setUser(null)
+      dispatch(setUser(null))
     } catch (exception) {
       dispatch(setNotification('logout failed', 'error', 5))
     }
@@ -85,8 +86,8 @@ const App = () => {
         <LoginForm
           username={username}
           password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleUsernameChange={(newUsername) => dispatch(setUsername(newUsername))}
+          handlePasswordChange={(newPassword) => dispatch(setPassword(newPassword))}
           handleSubmit={handleLogin}
         />
       </div>
