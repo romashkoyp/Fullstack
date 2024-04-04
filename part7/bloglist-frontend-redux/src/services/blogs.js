@@ -13,6 +13,18 @@ const getAll = async () => {
   return response.data
 }
 
+const getBlogsByUserId = async (userId) => {
+  const response = await axios.get('/api/users')
+  const users = response.data
+  const user = users.find(u => u.id === userId)
+
+  if (user) {
+    return user.blogs || []
+  } else {
+    return []
+  }
+}
+
 const create = async newObject => {
   const config = {
     headers: { Authorization: token },
@@ -41,5 +53,5 @@ const _delete = async (id) => {
 }
 
 export default {
-  getAll, create, update, setToken, _delete
+  getAll, getBlogsByUserId, create, update, setToken, _delete
 }

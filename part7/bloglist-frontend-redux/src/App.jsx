@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
+  Routes, Route } from 'react-router-dom'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
@@ -13,8 +13,10 @@ import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+import UserBlogs from './components/UserBlogs'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs, addNewBlog } from './reducers/blogReducer'
+import { setUserBlogs } from './reducers/userBlogReducer'
 import {
   setUsername,
   selectUsername, 
@@ -22,8 +24,7 @@ import {
   selectPassword, 
   setUser, 
   selectUser, 
-  setUsers, 
-  selectUsers
+  setUsers
 } from './reducers/userReducer'
 
 
@@ -118,16 +119,14 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>
+    <div>
+      <Router>
+        <h2>blogs</h2>
+        <Notification />
+        <p>{user.name} logged in <button type="button" onClick={handleLogout}>logout</button></p>
         <Routes>
           <Route path="/" element={
             <div>
-              <h2>blogs</h2>
-              <Notification />
-              <p>
-                {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
-              </p>
               <Togglable buttonLabel="create new blog" ref={blogFormRef} setVisible={() => {}}>
                 <BlogForm onSubmit={addBlog} />
               </Togglable>
@@ -136,18 +135,16 @@ const App = () => {
             </div>
           } />
           <Route path="/users" element={
-            <div>
-              <h2>blogs</h2>
-              <Notification />
-              <p>
-                {user.name} logged in <button type="button" onClick={handleLogout}>logout</button>
-              </p>
-              <UserList user={user} setUsers={setUsers} />
-            </div>
+            <UserList user={user} setUsers={setUsers} />
           } />
-        </Routes> 
-      </div>
+          <Route path="/users/:userId" element={
+            <UserBlogs
+              setUserBlogs={setUserBlogs}
+            />}
+          />
+        </Routes>
     </Router>
+    </div>
   )
 }
 
