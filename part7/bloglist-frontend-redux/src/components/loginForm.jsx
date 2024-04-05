@@ -1,3 +1,6 @@
+import Input from './styles/Input'
+import { PrimaryButton } from './styles/Buttons'
+
 const LoginForm = ({ 
   username,
   password,
@@ -9,7 +12,7 @@ const LoginForm = ({
     <form onSubmit={handleSubmit}>
       <div>
         username
-        <input
+        <Input
           data-testid='username'
           type="text"
           value={username}
@@ -19,7 +22,7 @@ const LoginForm = ({
       </div>
       <div>
         password
-        <input
+        <Input
           data-testid='password'
           type="password"
           value={password}
@@ -27,7 +30,7 @@ const LoginForm = ({
           onChange={({ target }) => handlePasswordChange(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <PrimaryButton type="submit">login</PrimaryButton>
     </form>
   )
 }

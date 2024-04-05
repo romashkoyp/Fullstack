@@ -28,6 +28,7 @@ import {
   selectUser, 
   setUsers
 } from './reducers/userReducer'
+import { SecondaryButton } from './components/styles/Buttons'
 
 const App = () => {
   const username = useSelector(selectUsername)
@@ -124,7 +125,7 @@ const App = () => {
       <Router>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Menu />
-          <p>{user.name} logged in <button type="button" onClick={handleLogout}>logout</button></p>
+          <p>{user.name} logged in <SecondaryButton type="button" onClick={handleLogout}>logout</SecondaryButton></p>
         </div>
         <Notification />
         <h2>blog app</h2>

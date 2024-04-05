@@ -1,21 +1,14 @@
 import { useSelector } from 'react-redux'
+import NotificationWrapper from './styles/Notifications'
 
 const Notification = () => {
-    const { message, type } = useSelector(state => state.notification)
+  const { message, type } = useSelector((state) => state.notification)
 
-    const style = {
-        border: 'solid',
-        padding: 10,
-        borderWidth: 2,
-        color: type === 'error' ? 'red' : 'green',
-      }
+  return message ? (
+    <NotificationWrapper type={type}>
+      {message}
+    </NotificationWrapper>
+  ) : null
+};
 
-    return message ? (
-      <div>
-        <div style={style}>{message}</div>
-        <p></p>
-      </div>
-    ) : null
-}
-    
 export default Notification

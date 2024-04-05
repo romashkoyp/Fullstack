@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
+import Input from './styles/Input'
+import { PrimaryButton } from './styles/Buttons'
 
 const BlogForm = ({ onSubmit }) => {
   const [newTitle, setNewTitle] = useState('')
@@ -40,7 +42,7 @@ const BlogForm = ({ onSubmit }) => {
       <form onSubmit={addBlog}>
         <div>
           title
-          <input
+          <Input
             id="title"
             value={newTitle}
             onChange={handleTitleChange}
@@ -48,7 +50,7 @@ const BlogForm = ({ onSubmit }) => {
         </div>
         <div>
           author
-          <input
+          <Input
             id="author"
             value={newAuthor}
             onChange={handleAuthorChange}
@@ -56,13 +58,13 @@ const BlogForm = ({ onSubmit }) => {
         </div>
         <div>
           url
-          <input
+          <Input
             id="url"
             value={newUrl}
             onChange={handleUrlChange}
           />
         </div>
-        <button type="submit">create</button>
+        <PrimaryButton type="submit">create</PrimaryButton>
       </form>
     </div>
   )

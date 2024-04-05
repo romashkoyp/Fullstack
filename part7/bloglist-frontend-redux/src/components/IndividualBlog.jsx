@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { incrementLikes, deleteBlog, addComments } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import { SecondaryButton } from './styles/Buttons'
+import Input from './styles/Input'
 
 const IndividualBlog = ({ user }) => {
   const { blogId } = useParams()
@@ -60,11 +62,11 @@ const IndividualBlog = ({ user }) => {
       {showRemoveButton && <button onClick={() => handleDeleteBlog(blog.id)}>remove blog</button>}
       <h3>comments</h3>
       <form onSubmit={handleAddComment}>
-      <input
+      <Input
         value={newComment}
         onChange={handleCommentChange}
       />
-      <button type="submit">add comment</button>
+      <SecondaryButton type="submit">add comment</SecondaryButton>
       </form>
       <ul>
         {blog.comments.map((comment, index) => (
