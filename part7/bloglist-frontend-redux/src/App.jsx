@@ -11,6 +11,7 @@ import BlogList from './components/blogList'
 import UserList from './components/UserList'
 import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
+import Menu from './components/Menu'
 import IndividualBlog from './components/IndividualBlog'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
@@ -121,16 +122,18 @@ const App = () => {
   return (
     <div>
       <Router>
-        <h2>blogs</h2>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Menu />
+          <p>{user.name} logged in <button type="button" onClick={handleLogout}>logout</button></p>
+        </div>
         <Notification />
-        <p>{user.name} logged in <button type="button" onClick={handleLogout}>logout</button></p>
+        <h2>blog app</h2>
         <Routes>
           <Route path="/" element={
             <div>
               <Togglable buttonLabel="create new blog" ref={blogFormRef} setVisible={() => {}}>
                 <BlogForm onSubmit={addBlog} />
               </Togglable>
-              <br />
               <BlogList user={user} setBlogs={setBlogs} />
             </div>
           } />
