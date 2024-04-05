@@ -11,6 +11,7 @@ import BlogList from './components/blogList'
 import UserList from './components/UserList'
 import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
+import IndividualBlog from './components/IndividualBlog'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import UserBlogs from './components/UserBlogs'
@@ -26,7 +27,6 @@ import {
   selectUser, 
   setUsers
 } from './reducers/userReducer'
-
 
 const App = () => {
   const username = useSelector(selectUsername)
@@ -134,14 +134,9 @@ const App = () => {
               <BlogList user={user} setBlogs={setBlogs} />
             </div>
           } />
-          <Route path="/users" element={
-            <UserList user={user} setUsers={setUsers} />
-          } />
-          <Route path="/users/:userId" element={
-            <UserBlogs
-              setUserBlogs={setUserBlogs}
-            />}
-          />
+          <Route path="/users" element={<UserList user={user} setUsers={setUsers}/>} />
+          <Route path="/users/:userId" element={<UserBlogs setUserBlogs={setUserBlogs}/>} />
+          <Route path="/blogs/:blogId" element={<IndividualBlog user={user}/>} />
         </Routes>
     </Router>
     </div>

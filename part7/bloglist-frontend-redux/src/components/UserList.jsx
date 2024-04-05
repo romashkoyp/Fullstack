@@ -1,8 +1,7 @@
-import User from './User'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-const UserList = ({ setUsers, blog }) => {
+const UserList = () => {
     const users = useSelector(state => state.user.users) || []
     const sortedUsers = Array.isArray(users) && users.length > 0
         ? [...users].sort((a, b) => b.blogs.length - a.blogs.length)
