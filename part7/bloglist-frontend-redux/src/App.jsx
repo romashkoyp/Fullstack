@@ -141,7 +141,7 @@ const App = () => {
           <Route path="/users/:userId" element={<UserBlogs setUserBlogs={setUserBlogs}/>} />
           <Route path="/blogs/:blogId" element={<IndividualBlog user={user}/>} />
         </Routes>
-    </Router>
+      </Router>
     </div>
   )
 }
