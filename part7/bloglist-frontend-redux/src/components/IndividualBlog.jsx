@@ -31,13 +31,17 @@ const IndividualBlog = ({ user }) => {
 
   return (
     <div>
-      <div>
-        <h2>{blog.title} - {blog.author}</h2>
-      </div>
+      <h2>{blog.title} - {blog.author}</h2>
       <div>{blog._url}</div>
       <div>likes {blog.likes} <button className='like' onClick={handleLikes}>like</button></div>
       <div>added by {blog.user.name}</div>
       {showRemoveButton && <button onClick={() => handleDeleteBlog(blog.id)}>remove blog</button>}
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
+      </ul>
     </div>
   )}
 

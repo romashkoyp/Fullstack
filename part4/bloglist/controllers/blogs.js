@@ -39,6 +39,10 @@ blogsRouter.post('/', async (request, response) => {
     blog.likes = 0
   }
 
+  if (!blog.comments) {
+    blog.comments = []
+  }
+
   if (!blog.title || !blog.author || !blog._url) {
     return response.status(400).json({
       error: 'The title, author or number is missing'
@@ -95,6 +99,25 @@ blogsRouter.put('/:id', async (request, response) => {
     response.json(updatedBlog)
   } else {
     response.status(404).end()
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const blogId = request.params.id
+  const comment = request.body.comments
+
+  if (!comment) {
+    console.log('Comment is necessary')
+    return response.status(400).json({ error: 'Comment is missing' })
+  }
+
+  try {
+    const blog = await Blog.findById(blogId)
+    blog.comments.push(comment)
+    await blog.save()
+    response.status(201).json(blog)
+  } catch (error) {
+    response.status(400).json({ error: error.message })
   }
 })
 

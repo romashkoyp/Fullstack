@@ -13,7 +13,8 @@ if (process.argv.length < 3) {
     title: String,
     author: String,
     _url: String,
-    likes: Number
+    likes: Number,
+    comments: [String],
   })
 
   const Blog = mongoose.model('Blog', blogSchema)
@@ -21,7 +22,7 @@ if (process.argv.length < 3) {
   Blog.find({})
     .then(blogs => {
       blogs.forEach(blog => {
-        console.log(blog.title, blog.author, blog._url, blog.likes)
+        console.log(blog.title, blog.author, blog._url, blog.likes, blog.comments)
       })
       mongoose.connection.close()
     })
@@ -35,12 +36,14 @@ if (process.argv.length < 3) {
   const author = process.argv[4]
   const _url = process.argv[5]
   const likes = process.argv[6]
+  const comments = process.argv[7]
 
   const blogSchema = new mongoose.Schema({
     title: String,
     author: String,
     _url: String,
-    likes: Number
+    likes: Number,
+    comments: [String]
   })
 
   const Blog = mongoose.model('Blog', blogSchema)
@@ -49,11 +52,12 @@ if (process.argv.length < 3) {
     title: title,
     author: author,
     _url: _url,
-    likes: likes
+    likes: likes,
+    comments: comments,
   })
 
   blog.save().then(() => {
-    console.log(`added ${title} ${author} ${_url} ${likes} to the blog list`)
+    console.log(`added ${title} ${author} ${_url} ${likes} ${comments} to the blog list`)
     mongoose.connection.close()
   })
 }
