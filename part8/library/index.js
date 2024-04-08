@@ -1,9 +1,11 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-unused-vars */
 /* eslint-disable quotes */
 const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
+const { v1: uuid } = require('uuid')
 
-const authors = [
+let authors = [
   {
     name: "Robert Martin",
     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
@@ -20,16 +22,16 @@ const authors = [
     born: 1821
   },
   {
-    name: "Joshua Kerievsky", // birthyear not known
+    name: "Joshua Kerievsky",
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e"
   },
   {
-    name: "Sandi Metz", // birthyear not known
+    name: "Sandi Metz",
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e"
   }
 ]
 
-const books = [
+let books = [
   {
     title: "Clean Code",
     published: 2008,
@@ -85,23 +87,32 @@ const typeDefs = `
   type Author {
     name: String!
     id: ID!
-    born: String
+    born: Int
     bookCount: Int!
   }
 
   type Book {
     title: String!
-    published: String!
+    published: Int!
     author: String!
     id: ID!
     genres: [String!]!
   }
-  
+
   type Query {
     authorCount: Int!
     bookCount: Int!
     allBooks(author: String, genre: String): [Book!]
     allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ) : Book
   }
 `
 
@@ -127,6 +138,19 @@ const resolvers = {
   Author: {
     bookCount: (root) => {
       return books.filter(b => b.author === root.name).length
+    }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      let author = authors.find(a => a.name === args.author)
+      if (!author) {
+        const newAuthor = { name: args.author, id: uuid(), born: null }
+        authors.push(newAuthor)
+        author = newAuthor
+      }
+      const newBook = { ...args, id: uuid() }
+      books.push(newBook)
+      return newBook
     }
   }
 }
