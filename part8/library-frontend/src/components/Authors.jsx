@@ -1,6 +1,8 @@
+import AuthorForm from './Born'
+
 const Authors = ({ authors }) => {
   return (
-    <div>
+    <><div>
       <h2>authors</h2>
       <table>
         <tbody>
@@ -18,7 +20,7 @@ const Authors = ({ authors }) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </div><AuthorForm /></>
   )
 }
 
