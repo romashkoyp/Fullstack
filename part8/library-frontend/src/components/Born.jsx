@@ -3,8 +3,8 @@ import { useMutation, useQuery } from '@apollo/client'
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 
 const AuthorForm = () => {
-  const { loading, data } = useQuery(ALL_AUTHORS)
-  const [name, setName] = useState('')
+  const { data } = useQuery(ALL_AUTHORS)
+  const [selectedAuthor, setSelectedAuthor] = useState(null)
   const [newBorn, setNewBorn] = useState('')
 
   const [ updateAuthor ] = useMutation(EDIT_AUTHOR, {
@@ -16,9 +16,16 @@ const AuthorForm = () => {
 
   const submit = async (event) => {
     event.preventDefault()
-    updateAuthor({ variables: { name, setBornTo: parseInt(newBorn) } })
-    setName('')
-    setNewBorn('')
+    if (selectedAuthor) {
+      updateAuthor({ variables: { name: selectedAuthor.name, setBornTo: parseInt(newBorn) } })
+      setNewBorn('')
+      setSelectedAuthor(null)
+    }
+  }
+
+  const handleAuthorChange = (author) => {
+    setSelectedAuthor(author)
+    setNewBorn(author.born)
   }
 
   return (
@@ -26,9 +33,15 @@ const AuthorForm = () => {
       <form onSubmit={submit}>
         <h2>Set birth year</h2>
         <div>
-          name <input value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          Author
+          <select value={selectedAuthor?.name || ''} onChange={e => handleAuthorChange(data.allAuthors.find(a => a.name === e.target.value))}>
+            <option value=''>Select an author</option>
+            {data.allAuthors.map((author) => (
+              <option key={author.name} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           born <input value={newBorn}
