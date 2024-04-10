@@ -3,7 +3,42 @@
 /* eslint-disable quotes */
 const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
+const mongoose = require('mongoose')
 const { v1: uuid } = require('uuid')
+const Book = require('./models/book')
+const Author = require('./models/author')
+mongoose.set('strictQuery', false)
+
+require('dotenv').config()
+const MONGODB_URI = process.env.MONGODB_URI
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
+const author = new Author({
+  name: 'Yaroslav',
+  born: 1988
+})
+
+author.save().then(savedAuthor => {
+  const book = new Book({
+    title: 'Horror',
+    published: 1983,
+    author: savedAuthor._id,
+    genres: ['crime', 'criminal']
+  })
+
+  book.save().then(result => {
+    console.log('book saved')
+    mongoose.connection.close()
+  })
+})
 
 let authors = [
   {
@@ -94,7 +129,7 @@ const typeDefs = `
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -109,8 +144,8 @@ const typeDefs = `
   type Mutation {
     addBook(
       title: String!
-      published: Int!
       author: String!
+      published: Int!
       genres: [String!]!
     ) : Book
 
