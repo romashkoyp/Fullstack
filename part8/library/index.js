@@ -21,102 +21,125 @@ mongoose.connect(MONGODB_URI)
     console.log('error connection to MongoDB:', error.message)
   })
 
-const author = new Author({
-  name: 'Yaroslav',
-  born: 1988
-})
-
-author.save().then(savedAuthor => {
-  const book = new Book({
-    title: 'Horror',
-    published: 1983,
-    author: savedAuthor._id,
-    genres: ['crime', 'criminal']
-  })
-
-  book.save().then(result => {
-    console.log('book saved')
-    mongoose.connection.close()
-  })
-})
-
-let authors = [
-  {
-    name: "Robert Martin",
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-    born: 1952
-  },
-  {
-    name: "Martin Fowler",
-    id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963
-  },
-  {
-    name: "Fyodor Dostoevsky",
-    id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821
-  },
-  {
-    name: "Joshua Kerievsky",
-    id: "afa5b6f2-344d-11e9-a414-719c6709cf3e"
-  },
-  {
-    name: "Sandi Metz",
-    id: "afa5b6f3-344d-11e9-a414-719c6709cf3e"
-  }
-]
-
-let books = [
-  {
-    title: "Clean Code",
-    published: 2008,
-    author: "Robert Martin",
-    id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"]
-  },
-  {
-    title: "Agile software development",
-    published: 2002,
-    author: "Robert Martin",
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-    genres: ["agile", "patterns", "design"]
-  },
-  {
-    title: "Refactoring, edition 2",
-    published: 2018,
-    author: "Martin Fowler",
-    id: "afa5de00-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"]
-  },
-  {
-    title: "Refactoring to patterns",
-    published: 2008,
-    author: "Joshua Kerievsky",
-    id: "afa5de01-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "patterns"]
-  },
-  {
-    title: "Practical Object-Oriented Design, An Agile Primer Using Ruby",
-    published: 2012,
-    author: "Sandi Metz",
-    id: "afa5de02-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "design"]
-  },
-  {
-    title: "Crime and punishment",
-    published: 1866,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de03-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "crime"]
-  },
-  {
-    title: "The Demon ",
-    published: 1872,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de04-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "revolution"]
-  }
-]
+// const authors = [
+//   { name: "Robert Martin", born: 1952 },
+//   { name: "Martin Fowler", born: 1963 },
+//   { name: "Fyodor Dostoevsky", born: 1821 },
+//   { name: "Joshua Kerievsky" },
+//   { name: "Sandi Metz" }
+// ]
+//
+// const books = [
+//   { title: "Clean Code", published: 2008, author: "Robert Martin", genres: ["refactoring"] },
+//   { title: "Agile software development", published: 2002, author: "Robert Martin", genres: ["agile", "patterns", "design"] },
+//   { title: "Refactoring, edition 2", published: 2018, author: "Martin Fowler", genres: ["refactoring"] },
+//   { title: "Refactoring to patterns", published: 2008, author: "Joshua Kerievsky", genres: ["refactoring", "patterns"] },
+//   { title: "Practical Object-Oriented Design, An Agile Primer Using Ruby", published: 2012, author: "Sandi Metz", genres: ["refactoring", "design"] },
+//   { title: "Crime and punishment", published: 1866, author: "Fyodor Dostoevsky", genres: ["classic", "crime"] },
+//   { title: "The Demon ", published: 1872, author: "Fyodor Dostoevsky", genres: ["classic", "revolution"] }
+// ]
+//
+// authors.forEach(authorData => {
+//   const author = new Author({
+//     name: authorData.name,
+//     born: authorData.born
+//   })
+//
+//   author.save().then(savedAuthor => {
+//     books.forEach(bookData => {
+//       if (bookData.author === savedAuthor.name) {
+//         const book = new Book({
+//           title: bookData.title,
+//           published: bookData.published,
+//           author: savedAuthor._id,
+//           genres: bookData.genres
+//         })
+//
+//         book.save().then(savedBook => {
+//           console.log('Book saved:', savedBook.title)
+//         })
+//       }
+//     })
+//   })
+// })
+//
+// let authors = [
+//   {
+//     name: "Robert Martin",
+//     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
+//     born: 1952
+//   },
+//   {
+//     name: "Martin Fowler",
+//     id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
+//     born: 1963
+//   },
+//   {
+//     name: "Fyodor Dostoevsky",
+//     id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
+//     born: 1821
+//   },
+//   {
+//     name: "Joshua Kerievsky",
+//     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e"
+//   },
+//   {
+//     name: "Sandi Metz",
+//     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e"
+//   }
+// ]
+//
+// let books = [
+//   {
+//     title: "Clean Code",
+//     published: 2008,
+//     author: "Robert Martin",
+//     id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
+//     genres: ["refactoring"]
+//   },
+//   {
+//     title: "Agile software development",
+//     published: 2002,
+//     author: "Robert Martin",
+//     id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
+//     genres: ["agile", "patterns", "design"]
+//   },
+//   {
+//     title: "Refactoring, edition 2",
+//     published: 2018,
+//     author: "Martin Fowler",
+//     id: "afa5de00-344d-11e9-a414-719c6709cf3e",
+//     genres: ["refactoring"]
+//   },
+//   {
+//     title: "Refactoring to patterns",
+//     published: 2008,
+//     author: "Joshua Kerievsky",
+//     id: "afa5de01-344d-11e9-a414-719c6709cf3e",
+//     genres: ["refactoring", "patterns"]
+//   },
+//   {
+//     title: "Practical Object-Oriented Design, An Agile Primer Using Ruby",
+//     published: 2012,
+//     author: "Sandi Metz",
+//     id: "afa5de02-344d-11e9-a414-719c6709cf3e",
+//     genres: ["refactoring", "design"]
+//   },
+//   {
+//     title: "Crime and punishment",
+//     published: 1866,
+//     author: "Fyodor Dostoevsky",
+//     id: "afa5de03-344d-11e9-a414-719c6709cf3e",
+//     genres: ["classic", "crime"]
+//   },
+//   {
+//     title: "The Demon ",
+//     published: 1872,
+//     author: "Fyodor Dostoevsky",
+//     id: "afa5de04-344d-11e9-a414-719c6709cf3e",
+//     genres: ["classic", "revolution"]
+//   }
+// ]
 
 const typeDefs = `
   type Author {
@@ -158,52 +181,64 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    authorCount: () => authors.length,
-    bookCount: () => books.length,
-    allBooks: (root, args) => {
-      if (args.author && args.genre) {
-        const authorBooks = books.filter(b => b.author === args.author)
-        return authorBooks.filter(b => b.genres.includes(args.genre))
+    authorCount: async () => Author.collection.countDocuments(),
+    bookCount: async () => Book.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      const { author, genre } = args
+      let books = await Book.find({}).populate('author')
+
+      if (author) {
+        books = books.filter(book => book.author.name === author)
       }
-      if (args.author) {
-        return books.filter(b => b.author === args.author)
+
+      if (genre) {
+        books = books.filter(book => book.genres.includes(genre))
       }
-      if (args.genre) {
-        return books.filter(b => b.genres.includes(args.genre))
-      }
+
       return books
     },
-    allAuthors: () => authors
+    allAuthors: async () => {
+      return await Author.find({})
+    }
   },
   Author: {
-    bookCount: (root) => {
-      return books.filter(b => b.author === root.name).length
+    bookCount: async (root) => {
+      return await Book.countDocuments({ author: root._id })
     }
   },
   Mutation: {
-    addBook: (root, args) => {
-      let author = authors.find(a => a.name === args.author)
-      if (!author) {
-        const newAuthor = { name: args.author, id: uuid(), born: null }
-        authors.push(newAuthor)
-        author = newAuthor
+    addBook: async (root, args) => {
+      const { author, title, published, genres } = args
+      let authorDoc = await Author.findOne({ name: author })
+
+      if (!authorDoc) {
+        authorDoc = new Author({ name: author })
+        await authorDoc.save()
       }
 
-      const newBook = { ...args, id: uuid() }
-      books.push(newBook)
-      return newBook
+      const book = new Book({
+        title,
+        published,
+        author: authorDoc._id,
+        genres
+      })
+      const savedBook = await book.save()
+      return await Book.findById(savedBook._id).populate('author')
     },
-    editAuthor: (root, args) => {
-      let author = authors.find(a => a.name === args.name)
-      if (!author) {
+    editAuthor: async (root, args) => {
+      const { name, setBornTo } = args
+      let authorDoc = await Author.findOne({ name })
+
+      if (!authorDoc) {
         return null
       }
 
-      if (args.setBornTo) {
-        author.born = args.setBornTo
+      if (setBornTo) {
+        authorDoc.born = setBornTo
       }
 
-      return author
+      await authorDoc.save()
+      return authorDoc
     }
   }
 }
