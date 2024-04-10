@@ -4,8 +4,8 @@
 const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
 const mongoose = require('mongoose')
-const { v1: uuid } = require('uuid')
 const Book = require('./models/book')
+const { GraphQLError } = require('graphql')
 const Author = require('./models/author')
 mongoose.set('strictQuery', false)
 
@@ -214,6 +214,14 @@ const resolvers = {
       if (!authorDoc) {
         authorDoc = new Author({ name: author })
         await authorDoc.save()
+      }
+
+      if (title.length < 6 || author.length < 6) {
+        throw new GraphQLError('too short title or author`s name', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
       }
 
       const book = new Book({
