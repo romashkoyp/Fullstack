@@ -13,8 +13,8 @@ import Notify from './components/Notify'
 import { ALL_AUTHORS, ALL_BOOKS } from './queries'
 
 const App = () => {
-  const { loading, data } = useQuery(ALL_AUTHORS)
-  const { data: booksData } = useQuery(ALL_BOOKS)
+  const { loading: authorsLoading, data: authorsData } = useQuery(ALL_AUTHORS)
+  const { loading: booksLoading, data: booksData } = useQuery(ALL_BOOKS)
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
@@ -26,8 +26,8 @@ const App = () => {
     }
   }, [token])
 
-  if (!booksData || !data) return null
-  if (loading) return <p>Loading...</p>
+  if (authorsLoading || booksLoading) return <p>Loading...</p>
+  if (!authorsData || !booksData) return <p>Error loading data</p>
 
   const notify = (message) => {
     setErrorMessage(message)
@@ -51,7 +51,7 @@ const App = () => {
         </div>
         <Notify errorMessage={errorMessage} setError={notify} />
         <Routes>
-          <Route path="/" element={<Authors authors = {data.allAuthors}/>} />
+          <Route path="/" element={<Authors authors={authorsData.allAuthors}/>} />
           <Route path="/books" element={<Books books={booksData.allBooks}/>} />
           <Route path="/recommend" element={token ? <RecommendBooks token={token} /> : <Navigate to="/" replace />} />
           <Route path="/newbook" element={!token ? <Navigate to="/" replace /> : <BookForm />} />
