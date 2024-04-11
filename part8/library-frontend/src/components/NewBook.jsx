@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
-import Books from './Books'
 
 const BookForm = () => {
   const { data: booksData } = useQuery(ALL_BOOKS)

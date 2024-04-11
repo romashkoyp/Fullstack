@@ -6,10 +6,11 @@ import {
 import Authors from './components/Authors'
 import Menu from './components/Menu'
 import Books from './components/Books'
+import RecommendBooks from './components/Recommend'
 import BookForm from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Notify from './components/Notify'
-import { ALL_AUTHORS, ALL_BOOKS  } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS } from './queries'
 
 const App = () => {
   const { loading, data } = useQuery(ALL_AUTHORS)
@@ -44,12 +45,15 @@ const App = () => {
   return (
     <div>
       <Router>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Menu token={token} />
+          {token && <button onClick={logout}>logout</button>}
+        </div>
         <Notify errorMessage={errorMessage} setError={notify} />
-        <Menu token={token} />
-        {token && <button onClick={logout}>logout</button>}
         <Routes>
           <Route path="/" element={<Authors authors = {data.allAuthors}/>} />
           <Route path="/books" element={<Books books={booksData.allBooks}/>} />
+          <Route path="/recommend" element={token ? <RecommendBooks token={token} /> : <Navigate to="/" replace />} />
           <Route path="/newbook" element={!token ? <Navigate to="/" replace /> : <BookForm />} />
           <Route path="/login" element={!token ? <LoginForm setToken={setToken} /> : <Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
