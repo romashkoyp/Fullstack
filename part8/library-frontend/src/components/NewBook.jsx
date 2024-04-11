@@ -73,7 +73,7 @@ const BookForm = () => {
         <button type='submit'>create book</button>
       </form>
     </div>
-    <Books books={booksData.allBooks}/></>
+    </>
   )
 }
 
