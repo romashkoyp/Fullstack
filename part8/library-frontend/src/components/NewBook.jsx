@@ -6,10 +6,10 @@ import Books from './Books'
 const BookForm = () => {
   const { data: booksData } = useQuery(ALL_BOOKS)
   const { loading, data } = useQuery(ALL_AUTHORS)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genres, setGenres] = useState([])
+  const [title, setTitle] = useState('new book')
+  const [author, setAuthor] = useState('new author')
+  const [published, setPublished] = useState('1977')
+  const [genres, setGenres] = useState(['criminal'])
 
   const [ createBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]

@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 
 const AuthorForm = () => {
-  const { data } = useQuery(ALL_AUTHORS)
+  const { loading, data } = useQuery(ALL_AUTHORS)
   const [selectedAuthor, setSelectedAuthor] = useState(null)
   const [newBorn, setNewBorn] = useState('')
 
@@ -27,6 +27,9 @@ const AuthorForm = () => {
     setSelectedAuthor(author)
     setNewBorn(author.born)
   }
+
+  if (loading) return <p>Loading...</p>
+  if (!data || !data.allAuthors) return null
 
   return (
     <div>

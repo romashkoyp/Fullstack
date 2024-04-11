@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
 
-const Menu = () => {
+const Menu = ({ token }) => {
   const padding = {
-    paddingRight: 5
+    paddingRight: 10
   }
 
   return (
-    <div>
+    <div style={{ paddingRight: 10, paddingBottom: 10 }}>
       <Link style={padding} to="/">authors</Link>
       <Link style={padding} to="/books">books</Link>
-      <Link style={padding} to="/newbook">add book</Link>
+      {token && <Link style={padding} to="/newbook">add book</Link>}
+      {!token && <Link style={padding} to="/login">login</Link>}
     </div>
   )
 }
