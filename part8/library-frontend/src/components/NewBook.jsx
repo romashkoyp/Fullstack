@@ -8,7 +8,7 @@ const BookForm = () => {
   const [title, setTitle] = useState('new book')
   const [author, setAuthor] = useState('new author')
   const [published, setPublished] = useState('1977')
-  const [genres, setGenres] = useState(['criminal'])
+  const [genres, setGenres] = useState(['refactoring'])
 
   const [ createBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]

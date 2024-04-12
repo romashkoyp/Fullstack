@@ -74,9 +74,9 @@ const resolvers = {
       })
       const savedBook = await book.save()
 
-      pubsub.publish('BOOK_ADDED', { bookAdded: book })
-
-      return await Book.findById(savedBook._id).populate('author')
+      const newBook = await Book.findById(savedBook._id).populate('author')
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
+      return newBook
     },
     editAuthor: async (root, args, context) => {
       const { name, setBornTo } = args
