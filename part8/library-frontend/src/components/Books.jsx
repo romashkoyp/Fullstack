@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 const Books = () => {
   const [selectedGenre, setSelectedGenre] = useState(null)
   const { loading, data } = useQuery(ALL_BOOKS)
-
   const [genres, setGenres] = useState([])
 
   useEffect(() => {
@@ -15,9 +14,16 @@ const Books = () => {
   }, [data])
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
-      alert(`New book with name "${data.data.bookAdded.title}" was added`)
-    }
+    onSubscriptionData: ({ client, subscriptionData }) => {
+      const newBook = subscriptionData.data.bookAdded
+      alert(`New book with name "${newBook.title}" was added`)
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: {
+          allBooks: [...data.allBooks, newBook],
+        },
+      })
+    },
   })
 
   if (loading) return <p>Loading...</p>
