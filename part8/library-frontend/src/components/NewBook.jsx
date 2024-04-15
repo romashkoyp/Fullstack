@@ -10,15 +10,15 @@ const BookForm = () => {
   const [published, setPublished] = useState('1977')
   const [genres, setGenres] = useState(['refactoring'])
 
-  const [ createBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS }, { query: FAVORITE_GENRE } ]
-  })
-
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       console.log(data.data)
       alert(`New book with name "${data.data.bookAdded.title}" was added`)
     }
+  })
+
+  const [ createBook ] = useMutation(ADD_BOOK, {
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS }, { query: FAVORITE_GENRE } ]
   })
 
   const submit = async (event) => {
