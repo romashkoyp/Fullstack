@@ -1,11 +1,19 @@
-import { useQuery, useSubscription } from '@apollo/client'
+import { useQuery, useSubscription, useApolloClient } from '@apollo/client'
 import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 import { useState, useEffect } from 'react'
 
 const Books = () => {
+  const client = useApolloClient()
   const [selectedGenre, setSelectedGenre] = useState(null)
-  const { loading, data } = useQuery(ALL_BOOKS)
+  const { loading, data, refetch } = useQuery(ALL_BOOKS)
   const [genres, setGenres] = useState([])
+  const [books, setBooks] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      setBooks(data.allBooks)
+    }
+  }, [data])
 
   useEffect(() => {
     if (data) {
@@ -14,15 +22,10 @@ const Books = () => {
   }, [data])
 
   useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ client, subscriptionData }) => {
-      const newBook = subscriptionData.data.bookAdded
+    onData: ({ data }) => {
+      const newBook = data.data.bookAdded
       alert(`New book with name "${newBook.title}" was added`)
-      client.writeQuery({
-        query: ALL_BOOKS,
-        data: {
-          allBooks: [...data.allBooks, newBook],
-        },
-      })
+      refetch()
     },
   })
 
