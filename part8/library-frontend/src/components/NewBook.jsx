@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useSubscription } from '@apollo/client'
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED } from '../queries'
+import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED, FAVORITE_GENRE } from '../queries'
 
 const BookForm = () => {
   const { data: booksData } = useQuery(ALL_BOOKS)
@@ -11,7 +11,7 @@ const BookForm = () => {
   const [genres, setGenres] = useState(['refactoring'])
 
   const [ createBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS }, { query: FAVORITE_GENRE } ]
   })
 
   useSubscription(BOOK_ADDED, {
