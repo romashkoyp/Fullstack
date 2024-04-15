@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { useQuery, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 import { useState, useEffect } from 'react'
 
 const Books = () => {
@@ -13,6 +13,12 @@ const Books = () => {
       setGenres([...new Set(data.allBooks.flatMap((book) => book.genres))])
     }
   }, [data])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      alert(`New book with name "${data.data.bookAdded.title}" was added`)
+    }
+  })
 
   if (loading) return <p>Loading...</p>
 
