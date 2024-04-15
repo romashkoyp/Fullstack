@@ -48,6 +48,7 @@ export const FAVORITE_GENRE = gql`
       username
       id
       favoriteGenre
+      booksByFavoriteGenre
     }
   }
 `

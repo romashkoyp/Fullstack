@@ -24,7 +24,8 @@ const typeDefs = `
 
   type User {
     username: String!
-    favoriteGenre: [String!]
+    favoriteGenre: String!
+    booksByFavoriteGenre: [String!]
     id: ID!
   }
 

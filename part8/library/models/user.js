@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     minlength: 3
   },
-  favoriteGenre: [
+  favoriteGenre: {
+    type: String,
+    required: true
+  },
+  booksByFavoriteGenre: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Book'

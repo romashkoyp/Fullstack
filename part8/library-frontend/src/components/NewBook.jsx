@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useMutation, useQuery } from '@apollo/client'
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { useMutation, useQuery, useSubscription } from '@apollo/client'
+import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED } from '../queries'
 
 const BookForm = () => {
   const { data: booksData } = useQuery(ALL_BOOKS)
@@ -12,6 +12,13 @@ const BookForm = () => {
 
   const [ createBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]
+  })
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data.data)
+      alert(`New book with name "${data.data.bookAdded.title}" was added`)
+    }
   })
 
   const submit = async (event) => {

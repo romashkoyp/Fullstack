@@ -1,21 +1,13 @@
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS, FAVORITE_GENRE } from '../queries'
-import { useState, useEffect } from 'react'
 
 const RecommendBooks = ({ token }) => {
   const { loading, data } = useQuery(ALL_BOOKS)
   const { data: favoriteGenreData } = useQuery(FAVORITE_GENRE)
-  const [favoriteGenreBooks, setFavoriteGenreBooks] = useState([])
 
-  useEffect(() => {
-    if (favoriteGenreData?.me?.favoriteGenre) {
-      const favoriteGenreBookIds = favoriteGenreData.me.favoriteGenre
-      const favoriteGenreBooks = data.allBooks.filter(book =>
-        favoriteGenreBookIds.includes(book.id)
-      )
-      setFavoriteGenreBooks(favoriteGenreBooks)
-    }
-  }, [token, favoriteGenreData, data.allBooks])
+  const favoriteGenreBooks = data.allBooks.filter(book =>
+    favoriteGenreData?.me?.booksByFavoriteGenre?.includes(book.id)
+  )
 
   if (loading) return <p>Loading...</p>
 

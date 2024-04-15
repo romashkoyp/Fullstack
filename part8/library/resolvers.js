@@ -74,6 +74,14 @@ const resolvers = {
       })
       const savedBook = await book.save()
 
+      if (currentUser.favoriteGenre && genres.includes(currentUser.favoriteGenre)) {
+        await User.findByIdAndUpdate(
+          currentUser._id,
+          { $addToSet: { booksByFavoriteGenre: savedBook._id } },
+          { new: true }
+        )
+      }
+
       const newBook = await Book.findById(savedBook._id).populate('author')
       pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
       return newBook
@@ -104,11 +112,11 @@ const resolvers = {
     },
     createUser: async (root, args) => {
       const { username, favoriteGenre } = args
-      const user = new User({ username })
+      const user = new User({ username, favoriteGenre })
 
       if (favoriteGenre) {
         const books = await Book.find({ genres: { $in: [favoriteGenre] } })
-        user.favoriteGenre = books.map(book => book._id)
+        user.booksByFavoriteGenre = books.map(book => book._id)
       }
 
       try {
