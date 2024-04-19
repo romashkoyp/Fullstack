@@ -5,8 +5,8 @@ interface Values {
 }
 
 export const parseArguments = (args: string[]): Values => {
-  console.log("Number of arguments:", args.length)
-  args.forEach((arg) => {console.log(arg);})
+  console.log("Number of arguments:", args.length);
+  args.forEach((arg) => {console.log(arg);});
 
   if (args.length < 2) throw new Error('Not enough arguments');
   if (args.length > 2) throw new Error('Too many arguments');
@@ -15,11 +15,11 @@ export const parseArguments = (args: string[]): Values => {
     return {
       height: Number(args[0]),
       weight: Number(args[1])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 export const calculateBmi = (cm: number, kg: number): string => {
   if (kg === 0) throw new Error('Can\'t divide by 0!');
@@ -46,4 +46,4 @@ export const calculateBmi = (cm: number, kg: number): string => {
     return 'Obese (Class III)';
   }
   return '';
-}
+};
