@@ -1,3 +1,28 @@
+// npm run CalculBmi
+interface Values {
+  height: number;
+  weight: number;
+}
+
+const parseArguments = (args: string[]): Values => {
+  // console.log(args.length)
+  // console.log(args[0])
+  // console.log(args[1])
+  console.log(args[2]) //height
+  console.log(args[3]) //weight
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too many arguments');
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      weight: Number(args[3])
+    }
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+}
+
 const calculateBmi = (cm: number, kg: number) : number => {
   if (kg === 0) throw new Error('Can\'t divide by 0!');
   if (kg < 0 ) throw new Error('Weight has to be a positive number');
@@ -6,7 +31,8 @@ const calculateBmi = (cm: number, kg: number) : number => {
 }
 
 try {
-  const bmi = calculateBmi(180, 74);
+  const { height, weight } = parseArguments(process.argv)
+  const bmi = calculateBmi(height, weight);
   console.log(`BMI is: ${bmi}`)
   if (bmi < 16) {
     console.log('Underweight (Severe thinness)');
