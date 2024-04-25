@@ -1,9 +1,24 @@
-GET http://localhost:3000/api/ping/
+GET http://localhost:3001/api/ping/
 
 ###
 
-GET http://localhost:3000/api/diagnoses/
+GET http://localhost:3001/api/diagnoses/
 
 ###
 
-GET http://localhost:3000/api/patients/
+GET http://localhost:3001/api/patients/
+
+###
+GET http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667
+
+###
+POST http://localhost:3001/api/patients/
+Content-Type: application/json
+
+{
+  "name": "Juana",
+  "dateOfBirth": "1988",
+  "ssn": "dfhfnfghnfg",
+  "gender": "male",
+  "occupation": "Jyvaskyla"
+}
