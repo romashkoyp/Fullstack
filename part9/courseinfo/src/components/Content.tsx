@@ -1,22 +1,40 @@
-interface ContentProps {
-  parts: CoursePartBase[];
-}
+import Part from './Part'
 
-interface CoursePartBase {
+export interface CoursePartBase {
   name: string;
   exerciseCount: number;
 }
 
-const Content = (props: ContentProps) => {
+export interface CoursePartDescription extends CoursePartBase {
+  description: string;
+  kind: string; //problem was here
+}
+
+export interface CoursePartBasic extends CoursePartDescription {
+  kind: "basic"
+}
+
+export interface CoursePartGroup extends CoursePartBase {
+  groupProjectCount: number;
+  kind: "group"
+}
+
+export interface CoursePartBackground extends CoursePartDescription {
+  backgroundMaterial: string;
+  kind: "background"
+}
+
+export interface CoursePartArray extends CoursePartDescription {
+  requirements: string[];
+  kind: "special"
+}
+
+export type CoursePart = CoursePartArray | CoursePartDescription | CoursePartBasic | CoursePartGroup | CoursePartBackground;
+
+const Content = ({ parts }: { parts: CoursePart[] }) => {
   return (
-    <div>
-      {props.parts.map((part, index) => (
-        <p key={index}>
-          {`${part.name} ${part.exerciseCount}`}
-        </p>
-      ))}
-    </div>
-  )
+        <Part parts={parts}/>
+  );
 };
 
 export default Content;
