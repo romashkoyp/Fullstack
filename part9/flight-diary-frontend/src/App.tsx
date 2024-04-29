@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { DiaryEntry, Visibility, Weather} from './types';
-import { getAll } from './services/diaries';
+import { getAll, createDiary } from './services/diaries';
 
 const App = () => {
-  // const [newDiary, SetNewDiary] = useState('');
+  const [newDate, SetNewDate] = useState('');
+  const [newWeather, SetNewWeather] = useState('');
+  const [newVisibility, SetNewVisibility] = useState('');
+  const [newComment, SetNewComment] = useState('');
   const [diaries, setDiaries] = useState<DiaryEntry[]>([
     { id: 1,
       date: '1988-1-1',
       weather: Weather.Sunny,
-      visibility: Visibility.Great,
-      comment: 'new comment'
+      visibility: Visibility.Great
     }
   ]);
 
@@ -18,17 +20,58 @@ const App = () => {
       setDiaries(data);
     });
   }, []);
-  //
-  //const diaryCreation = (event: React.SyntheticEvent) => {
-  //  event.preventDefault()
-  //  createDiary({ content: newNote }).then(data => {
-  //    setNotes(diaries.concat(data))
-  //  })
-  //  SetNewDiary('')
-  //};
+  
+  const diaryCreation = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    createDiary({ 
+      date: newDate,
+      weather: newWeather,
+      visibility: newVisibility,
+      comment: newComment,
+     })
+     .then(data => {
+      setDiaries(diaries.concat(data));
+    });
+    SetNewDate('');
+    SetNewWeather('');
+    SetNewVisibility('');
+    SetNewComment('');
+  };
       
   return (
     <div>
+      <h1>New diary</h1>
+      <form onSubmit={diaryCreation}>
+        <div>
+          date
+          <input
+            value={newDate}
+            onChange={(event) => SetNewDate(event.target.value)}
+          />
+        </div>
+        <div>
+          weather
+          <input
+            value={newWeather}
+            onChange={(event) => SetNewWeather(event.target.value)} 
+          /> 
+        </div>
+        <div>
+          visibility
+          <input
+            value={newVisibility}
+            onChange={(event) => SetNewVisibility(event.target.value)} 
+          /> 
+        </div>
+        <div>
+          comment
+          <input
+            value={newComment}
+            onChange={(event) => SetNewComment(event.target.value)} 
+          /> 
+        </div>
+        <button type='submit'>add</button>
+      </form>
       <h1>Diary entries</h1>
       <div>
           {diaries.map(diary => (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NonSensitiveDiaryEntry } from "../types";
+import { NonSensitiveDiaryEntry, NewDiaryEntry } from "../types";
 import { apiBaseUrl } from "../constants";
 
 export const getAll = async () => {
@@ -9,16 +9,14 @@ export const getAll = async () => {
   return response.data;
 };
 
-// const create = async (object: PatientFormValues) => {
-//   const { data } = await axios.post<Patient>(
-//     `${apiBaseUrl}/patients`,
-//     object
-//   );
-// 
-//   return data;
-// };
+export const createDiary = async (object: NewDiaryEntry) => {
+  const response = await axios
+    .post<NewDiaryEntry>(`${apiBaseUrl}/diaries`, object);
+    
+  return response.data;
+};
 
 export default {
-  getAll
+  getAll, createDiary
 };
 
