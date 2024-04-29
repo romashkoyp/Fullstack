@@ -14,6 +14,7 @@ const App = () => {
       visibility: Visibility.Great
     }
   ]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     getAll().then(data => {
@@ -27,20 +28,30 @@ const App = () => {
       date: newDate,
       weather: newWeather,
       visibility: newVisibility,
-      comment: newComment,
+      comment: newComment
      })
-     .then(data => {
-      setDiaries(diaries.concat(data));
-    });
-    SetNewDate('');
-    SetNewWeather('');
-    SetNewVisibility('');
-    SetNewComment('');
+      .then(data => {
+        setDiaries(diaries.concat(data));
+        setErrorMessage('');
+        SetNewDate('');
+        SetNewWeather('');
+        SetNewVisibility('');
+        SetNewComment('');
+      })
+      .catch(error => {
+        if (error.response) {
+          setErrorMessage(error.response.data);
+          //console.log(error.response.data);
+        } else {
+          setErrorMessage('An error occurred while creating the diary entry.');
+        }
+      });
   };
       
   return (
     <div>
       <h1>New diary</h1>
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       <form onSubmit={diaryCreation}>
         <div>
           date
