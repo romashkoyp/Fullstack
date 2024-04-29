@@ -1,0 +1,19 @@
+GET http://localhost:3001/api/ping/
+
+###
+
+GET http://localhost:3001/api/diaries/
+
+###
+GET http://localhost:3001/api/diaries/1
+
+###
+POST http://localhost:3001/api/diaries/
+Content-Type: application/json
+
+{
+  "date": "1988-12-1",
+  "weather": "cloudy",
+  "visibility": "good",
+  "comment": "New comment"
+}

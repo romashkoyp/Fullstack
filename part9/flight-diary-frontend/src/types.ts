@@ -1,22 +1,26 @@
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
+export enum Weather {
+  Sunny = 'sunny',
+  Rainy = 'rainy',
+  Cloudy = 'cloudy',
+  Stormy = 'stormy',
+  Windy = 'windy',
 }
 
-export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+export enum Visibility {
+  Great = 'great',
+  Good = 'good',
+  Ok = 'ok',
+  Poor = 'poor',
 }
 
-export interface Patient {
-  id: string;
-  name: string;
-  occupation: string;
-  gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
+export interface DiaryEntry {
+  id: number;
+  date: string;
+  weather: Weather;
+  visibility: Visibility;
+  comment?: string;
 }
 
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+
+export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;

@@ -1,43 +1,44 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { Button, Divider, Container, Typography } from '@mui/material';
-
-import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
-
-import patientService from "./services/patients";
-import PatientListPage from "./components/PatientListPage";
+import { useState, useEffect } from 'react';
+import { DiaryEntry, Visibility, Weather} from './types';
+import { getAll } from './services/diaries';
 
 const App = () => {
-  const [patients, setPatients] = useState<Patient[]>([]);
+  // const [newDiary, SetNewDiary] = useState('');
+  const [diaries, setDiaries] = useState<DiaryEntry[]>([
+    { id: 1,
+      date: '1988-1-1',
+      weather: Weather.Sunny,
+      visibility: Visibility.Great,
+      comment: 'new comment'
+    }
+  ]);
 
   useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
-
-    const fetchPatientList = async () => {
-      const patients = await patientService.getAll();
-      setPatients(patients);
-    };
-    void fetchPatientList();
+    getAll().then(data => {
+      setDiaries(data);
+    });
   }, []);
-  
+  //
+  //const diaryCreation = (event: React.SyntheticEvent) => {
+  //  event.preventDefault()
+  //  createDiary({ content: newNote }).then(data => {
+  //    setNotes(diaries.concat(data))
+  //  })
+  //  SetNewDiary('')
+  //};
+      
   return (
-    <div className="App">
-      <Router>
-        <Container>
-          <Typography variant="h3" style={{ marginBottom: "0.5em" }}>
-            Patientor
-          </Typography>
-          <Button component={Link} to="/" variant="contained" color="primary">
-            Home
-          </Button>
-          <Divider hidden />
-          <Routes>
-            <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
-          </Routes>
-        </Container>
-      </Router>
+    <div>
+      <h1>Diary entries</h1>
+      <div>
+          {diaries.map(diary => (
+            <div key={diary.id}>
+              <h3>{diary.date}</h3>
+              <p style={{ marginBottom: '0px' }}>{diary.weather}</p>
+              <p style={{ marginTop: '0px' }}>{diary.visibility}</p>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };
