@@ -4,14 +4,16 @@ import { getAll, createDiary } from './services/diaries';
 
 const App = () => {
   const [newDate, SetNewDate] = useState('');
-  const [newWeather, SetNewWeather] = useState('');
-  const [newVisibility, SetNewVisibility] = useState('');
+  const [selectedWeather, setSelectedWeather] = useState<Weather>(Weather.Sunny);
+  const [selectedVisibility, setSelectedVisibility] = useState<Visibility>(Visibility.Great);
   const [newComment, SetNewComment] = useState('');
   const [diaries, setDiaries] = useState<DiaryEntry[]>([
-    { id: 1,
+    { 
+      id: 1,
       date: '1988-1-1',
       weather: Weather.Sunny,
-      visibility: Visibility.Great
+      visibility: Visibility.Great,
+      comment: 'test comment'
     }
   ]);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -26,16 +28,16 @@ const App = () => {
     event.preventDefault();
     createDiary({ 
       date: newDate,
-      weather: newWeather,
-      visibility: newVisibility,
+      weather: selectedWeather,
+      visibility: selectedVisibility,
       comment: newComment
      })
       .then(data => {
         setDiaries(diaries.concat(data));
         setErrorMessage('');
         SetNewDate('');
-        SetNewWeather('');
-        SetNewVisibility('');
+        setSelectedWeather(Weather.Sunny);
+        setSelectedVisibility(Visibility.Great);
         SetNewComment('');
       })
       .catch(error => {
@@ -47,7 +49,18 @@ const App = () => {
         }
       });
   };
-      
+
+  const currentDate = new Date().toISOString().split('T')[0];
+  // console.log(currentDate);
+
+  const handleWeatherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedWeather(event.target.value as Weather);
+  };
+
+  const handleVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedVisibility(event.target.value as Visibility);
+  };
+     
   return (
     <div>
       <h1>New diary</h1>
@@ -56,23 +69,43 @@ const App = () => {
         <div>
           date
           <input
+            type='date'
             value={newDate}
+            min="2000-01-01"
+            max={currentDate}
+            required pattern="\d{4}-\d{2}-\d{2}"
             onChange={(event) => SetNewDate(event.target.value)}
           />
         </div>
         <div>
-          weather
-          <input
-            value={newWeather}
-            onChange={(event) => SetNewWeather(event.target.value)} 
-          /> 
+          select weather
+          {Object.values(Weather).map((weather) => (
+            <div key={weather}>
+              <input
+                type="radio"
+                id={weather}
+                value={weather}
+                checked={selectedWeather === weather}
+                onChange={handleWeatherChange}
+              />
+              <label htmlFor={weather}>{weather}</label>
+            </div>
+          ))}
         </div>
         <div>
-          visibility
-          <input
-            value={newVisibility}
-            onChange={(event) => SetNewVisibility(event.target.value)} 
-          /> 
+          select visibility
+          {Object.values(Visibility).map((visibility) => (
+            <div key={visibility}>
+              <input
+                type="radio"
+                id={visibility}
+                value={visibility}
+                checked={selectedVisibility === visibility}
+                onChange={handleVisibilityChange}
+              />
+              <label htmlFor={visibility}>{visibility}</label>
+            </div>
+          ))}
         </div>
         <div>
           comment
