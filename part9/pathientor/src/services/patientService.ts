@@ -1,7 +1,6 @@
 import patientEntries from '../../data/patients';
 import { v1 as uuid } from 'uuid';
 import { PatientEntry, NonSensitivePatientEntry, NewPatientEntry } from '../types';
-const id = uuid();
 
 const patients: PatientEntry[] = patientEntries;
 
@@ -25,6 +24,7 @@ const findById = (id: string): PatientEntry | undefined => {
 };
 
 const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
+  const id = uuid();
   const newPatientEntry = {
     id,
     ...entry

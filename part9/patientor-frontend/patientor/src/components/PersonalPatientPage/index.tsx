@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
+import diagnosesService from "../../services/diagnoses";
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
-import { PatientEntry } from '../../types';
+import { PatientEntry, DiagnosesEntry } from '../../types';
 
 interface PatientIdProps {
   setPatient: React.Dispatch<React.SetStateAction<PatientEntry | null>>;
@@ -12,6 +13,7 @@ const PatientId: React.FC<PatientIdProps> = ({ setPatient }) => {
   const [patientData, setPatientData] = useState<PatientEntry | null>(null);
   const patientId = window.location.pathname.split("/")[2];
   // console.log(window.location);
+  const [diagnosisData, setDiagnosisData] = useState<{ [code: string]: DiagnosesEntry | null }>({});
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -38,6 +40,35 @@ const PatientId: React.FC<PatientIdProps> = ({ setPatient }) => {
     };
   }, [patientData, setPatient]);
 
+  useEffect(() => {
+    if (patientData && patientData.entries) {
+      const fetchDiagnosisData = async (code: string) => {
+        try {
+          const diagnosis = await diagnosesService.findByCode(code);
+          setDiagnosisData(prevState => ({
+            ...prevState,
+            [code]: diagnosis,
+          }));
+        } catch (error) {
+          console.error('Error fetching diagnosis data:', error);
+        }
+      };
+  
+      const uniqueCodes = new Set<string>();
+      patientData.entries.forEach(entry => {
+        if (entry.diagnosisCodes) {
+          entry.diagnosisCodes.forEach(code => {
+            if (!diagnosisData[code] && !uniqueCodes.has(code)) {
+              uniqueCodes.add(code);
+              fetchDiagnosisData(code);
+            }
+          });
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patientData]);
+
   if (!patientData) {
     return <div>Loading patient data...</div>;
   }
@@ -57,7 +88,7 @@ const PatientId: React.FC<PatientIdProps> = ({ setPatient }) => {
         <div key={entry.id}>
           <p>{entry.date} {entry.description}</p>
           {entry.diagnosisCodes?.map(code =>
-            <li key={code}>{code}</li>
+            <li key={code}>{code} {diagnosisData[code]?.name}</li>
           )}
         </div>
       )}

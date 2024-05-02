@@ -1,15 +1,15 @@
 import axios from "axios";
-import { Patient, PatientFormValues } from "../types";
+import { PatientEntry, NonSensitivePatientEntry } from "../types";
 
 import { apiBaseUrl } from "../constants";
 
 const getAll = async () => {
-  const { data } = await axios.get<Patient[]>(`${apiBaseUrl}/patients`);
+  const { data } = await axios.get<PatientEntry[]>(`${apiBaseUrl}/patients`);
   return data;
 };
 
 const getById = async (id: string) => {
-  const { data } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
+  const { data } = await axios.get<PatientEntry>(`${apiBaseUrl}/patients/${id}`);
 
   if (data) {
     return data;
@@ -18,8 +18,8 @@ const getById = async (id: string) => {
   }
 };
 
-const create = async (object: PatientFormValues) => {
-  const { data } = await axios.post<Patient>(
+const create = async (object: NonSensitivePatientEntry) => {
+  const { data } = await axios.post<PatientEntry>(
     `${apiBaseUrl}/patients`,
     object
   );

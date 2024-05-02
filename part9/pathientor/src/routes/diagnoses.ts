@@ -8,4 +8,17 @@ router.get('/', (_req, res) => {
   console.log('data of diagnoses is fetched');
 });
 
+router.get('/:code', (req, res) => {
+  const diagnosis = diagnosesService.findByCode(String(req.params.code));
+  
+  if (diagnosis) {
+    res.send(diagnosis);
+    console.log(`data of diagnosis with code ${req.params.code} was fetched`);
+  } else {
+    res.sendStatus(404);
+    console.log(`no data found for diagnosis's code ${req.params.code}`);
+
+  }
+});
+
 export default router;
