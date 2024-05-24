@@ -4,6 +4,7 @@ import Item from './RepositoryItem'
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+    backgroundColor: '#e1e4e8',
   },
 });
 
@@ -70,6 +71,7 @@ const RepositoryList = () => {
           forksCount={item.forksCount}
           reviewCount={item.reviewCount}
           ratingAverage={item.ratingAverage}
+          ownerAvatarUrl={item.ownerAvatarUrl}
         />
       )}
       keyExtractor={(item) => item.id}
