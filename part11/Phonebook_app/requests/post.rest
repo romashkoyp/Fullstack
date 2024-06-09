@@ -1,0 +1,7 @@
+POST https://phonebook-0ubg.onrender.com/api/persons/
+Content-Type: application/json
+
+{
+    "name": "Artoo Hellas",
+    "number": "12-634563456"
+}

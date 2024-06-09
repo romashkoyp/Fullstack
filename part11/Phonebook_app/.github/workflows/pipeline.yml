@@ -1,0 +1,80 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies for backend
+        run: npm install
+
+      - name: Eslint for backend
+        run: npm run lint
+
+      - name: Install dependencies for frontend
+        run: cd frontend && npm install
+
+      - name: Eslint for frontend
+        run: cd frontend && npm run lint      
+
+      - name: Build
+        run: npm run build:ui
+        
+      - name: Deploy to render.com
+        id: deployment
+        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
+      
+      - name: New version was deployed
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        if: ${{ steps.deployment.conclusion == 'success' }}
+        with:
+          text: A new version of Phonebook app was deployed
+          description: >
+            to https://phonebook-app-fnrg.onrender.com/
+            by ${{ github.event.commits[0].committer.username }}
+          severity: info
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Build failed
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        if: ${{ steps.deployment.conclusion == 'skipped' }}
+        with:
+          text: Build failed
+          description: >
+           commit ${{ github.event.commits[0].url }}
+           by ${{ github.event.commits[0].committer.username }} broke the build
+          severity: error
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  tag_realease:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@a2c70ae13a881faf2b4953baaa9e49731997ab36
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
