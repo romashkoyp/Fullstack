@@ -1,0 +1,29 @@
+###
+GET http://localhost:3000/
+
+###
+GET http://localhost:3000/todos
+
+###
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{
+    "text": "test",
+    "done": true
+}
+
+###
+GET http://localhost:3000/todos/6669aac37a73061960d1d2b7
+
+
+###
+DELETE http://localhost:3000/todos/66687a036880651c6072a864
+
+###
+PUT http://localhost:3000/todos/66687337df814f1650ff765
+Content-Type: application/json
+
+{
+    "text": "sfghnfghn"
+}

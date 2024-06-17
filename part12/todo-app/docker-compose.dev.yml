@@ -1,0 +1,70 @@
+services:
+  client:
+    image: todo_frontend_dev
+    build:
+      context: ./todo-frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./todo-frontend:/usr/src/app/
+    #ports:
+    #  - 5173:5173
+    container_name: client_dev
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - ./todo-backend/redis_data:/data
+
+  server:
+    image: todo_backend_dev
+    build:
+      context: ./todo-backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./todo-backend:/usr/src/app
+    #ports:
+    #  - 3000:3000
+    environment:
+      - REDIS_URL=redis://redis:6379 
+      #instead of redis://localhost:6379, use name of image + port after ": ..."
+
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database 
+      #instead of mongodb://the_username:the_password@localhost:3456/the_database
+
+      - CHOKIDAR_USEPOLLING=true #essential thing in my keys to be hot updated in container during developing
+    container_name: server_dev
+    depends_on:
+      - mongo
+      - redis
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - client
+      - server
+
+volumes:
+  mongo_data:
+  redis_data:
