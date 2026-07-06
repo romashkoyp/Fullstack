@@ -1,0 +1,14 @@
+"use server"
+
+import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
+import { addBlog } from "../services/blogs"
+
+export const createBlog = async (formData: FormData) => {
+  const content = formData.get("content") as string
+  const author = formData.get("author") as string
+  const title = formData.get("title") as string
+  addBlog(content, author, title)
+  revalidatePath("/blogs")
+  redirect("/blogs")
+}
