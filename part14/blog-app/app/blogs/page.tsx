@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { getBlogs } from "../services/blogs"
+import { sortBlogsByLikes } from "../services/blogs"
 
 const Blogs = () => {
-  const blogs = getBlogs()
+  const blogs = sortBlogsByLikes()
   return (
     <div>
       <h2>Blogs</h2>

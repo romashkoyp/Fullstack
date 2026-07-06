@@ -8,6 +8,10 @@ export const getBlogs = () => {
   return blogs
 }
 
+export const sortBlogsByLikes = () => {
+  return blogs.sort((a, b) => b.likes - a.likes)
+}
+
 export const addBlog = (content: string, author: string, title: string) => {
   blogs.push({ id: blogs.length + 1, content, author, title, url: "", likes: 0 })
 }
