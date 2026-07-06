@@ -1,7 +1,7 @@
 const blogs = [
-  { id: 1, content: "Hello there, it is my first blog.", title: "Test title 1", author: "Author 1", url: "", likes: 3},
-  { id: 2, content: "Hello there, it is my second blog.", title: "Test title 2", author: "Author 2", url: "", likes: 5},
-  { id: 3, content: "Hello there, it is my third blog.", title: "Test title 3", author: "Author 3", url: "", likes: 2}
+  { id: 1, content: "Hello there, it is my first blog.", title: "one two four", author: "Author 1", url: "", likes: 3},
+  { id: 2, content: "Hello there, it is my second blog.", title: "two", author: "Author 2", url: "", likes: 5},
+  { id: 3, content: "Hello there, it is my third blog.", title: "three", author: "Author 3", url: "", likes: 2}
 ]
 
 export const getBlogs = () => {
@@ -25,4 +25,8 @@ export const likeBlog = (id: number) => {
   if (blog) {
     blog.likes += 1
   }
+}
+
+export const filterBlogsByTitle = (title: string) => {
+  return blogs.filter(blog => blog.title.toLowerCase().includes(title.toLowerCase()))
 }

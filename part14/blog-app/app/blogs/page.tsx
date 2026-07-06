@@ -1,13 +1,30 @@
 import Link from "next/link"
-import { sortBlogsByLikes } from "../services/blogs"
+import { sortBlogsByLikes, filterBlogsByTitle } from "../services/blogs"
+import { filterByTitle } from "../actions/blogs"
 
-const Blogs = () => {
+const Blogs = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ title?: string }>
+}) => {
   const blogs = sortBlogsByLikes()
+  const title = (await searchParams)?.title?.trim().toLowerCase()
+
+  const filteredBlogs = title
+    ? filterBlogsByTitle(title)
+    : blogs
+    
   return (
     <div>
       <h2>Blogs</h2>
+      <form action={filterByTitle}>
+        <input type="text" name="title" placeholder="Filter by title" />
+        <button type="submit">
+          Filter
+        </button>
+      </form>
       <div>
-        {blogs.map(blog => (
+        {filteredBlogs.map(blog => (
           <div key={blog.id}>
             <hr />
             <p>
